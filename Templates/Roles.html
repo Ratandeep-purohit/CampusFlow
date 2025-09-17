@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roles</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static' , filename='Roles.css')}}">
+</head>
+<body>
+    <!--Header-->
+    <header>
+        <div class="logo">📘 CampusFlow</div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('feature') }}">Features</a></li>
+                <li><a href="{{ url_for('about')}}">About</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <!--Setting Nav-->
+    <nav class="settings-nav">
+        <ul>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">👤 Student</a>
+                <div class="dropdown-content">
+                    <a href="#">📋 Student Dashboard</a>
+                    <a href="#">📊 Add Student</a>
+                    <a href="#">📚 View Student Profiles</a>
+                    <a href="#">📅 Student Attendance</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">💵 Fees Management</a>
+                <div class="dropdown-content">
+                    <a href="#">💰 View Fees</a>
+                    <a href="#">📄 Generate Receipt</a>
+                    <a href="#">📊 Fees Analytics</a>
+                    <a href="#">📅 Fees Collection</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">🏫 Exams & Results</a>
+                <div class="dropdown-content">
+                    <a href="#">📚 View Results</a>
+                    <a href="#">📅 Schedule Exams</a>
+                    <a href="#">📋 Question Paper Management</a>
+                    <a href="#">📈 Generate Result</a>
+                    <a href="#">📝 Add Exam</a>
+                    <a href="#">📊 Result Analytics</a>
+                    <a href="#">📈 Subject-wise Performance Reports</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">👨 Teacher & Faculty</a>
+                <div class="dropdown-content">
+                    <a href="#">🗂 Staff Profiles & Records</a>
+                    <a href="#">📚 Add Teacher & Faculty</a>
+                    <a href="#">📅 Teacher Timetable Management</a>
+                    <a href="#">⏰ Attendance & Leave Tracking</a>
+                    <a href="#">📊 Performance Evaluation</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">📆 Event Management</a>
+                <div class="dropdown-content">
+                    <a href="#">📅 Events Calendar</a>
+                    <a href="#">📢 News & Updates</a>
+                    <a href="#">📸 Photo Gallery</a>
+                    <a href="#">➕ Add New Event</a>
+                    <a href="#">📝 Register for Event</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">🔐 Security & Access</a>
+                <div class="dropdown-content">
+                    <a href="#">🔑 User Management</a>
+                    <a href="#">🔒 Role-based Access Control</a>
+                    <a href="#">🛡️ Data Encryption</a>
+                    <a href="#">📊 Audit Logs</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">⚙️ Settings</a>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('acadamic_year') }}">📅 acadamic Year</a>
+                    <a href="{{ url_for('department')}}">🏢 Departments</a>
+                    <a href="{{url_for('standards_page')}}">📚Manage Standard</a>
+                    <a href="#">👥 Manage Roles</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <!--Main two-column container-->
+    <div class="main-container">
+        <!--Left side:Add Roles-->
+        <div class="add-year-box">
+            <h1>Create Roles</h1>
+            <form method="POST" action="#">
+                <div class="form-group">
+                    <label for="#">Roles</label>
+                    <input type="text" id="Roles" name="Roles" required>
+                </div>
+                <button type="submit">➕ Create</button>
+            </form>
+        </div>
+
+        <!--Right side: Roles list-->
+        <ul class="year-list">
+            {% for Role in Roles %}
+            <li>
+                <span>{{Role.Roles_name}}</span>
+                <!--Edit form-->
+                <form method="POST" action="{{ url_for('Edit_Roles') ,id=Role.id }}" class="edit-form" style="display: inline;">
+                    <input type="text" name="Roles_name" placeholder="Edit Roles" required>
+                    <button type="submit" class="edit-toggle">Edit</button>
+                </form>
+                <a href="{{ url_for('delete_roles',id=Role.id)}}" class="delete-btn"
+                onclick="return confirm('Are you sure you want to delete this Role?');">
+                Delete
+            </a>
+            </li>
+        </ul>
+    </div>
+    
+</body>
+</html>

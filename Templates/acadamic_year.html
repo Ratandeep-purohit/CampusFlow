@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>CampusFlow - Student Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='acadamic_year.css') }}">
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">📘 CampusFlow</div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('feature') }}">Features</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Settings Nav -->
+    <nav class="settings-nav">
+        <ul>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">👤 Student</a>
+                <div class="dropdown-content">
+                    <a href="#">📋 Student Dashboard</a>
+                    <a href="#">📊 Add Student</a>
+                    <a href="#">📚 View Student Profiles</a>
+                    <a href="#">📅 Student Attendance</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">💵 Fees Management</a>
+                <div class="dropdown-content">
+                    <a href="#">💰 View Fees</a>
+                    <a href="#">📄 Generate Receipt</a>
+                    <a href="#">📊 Fees Analytics</a>
+                    <a href="#">📅 Fees Collection</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">🏫 Exams & Results</a>
+                <div class="dropdown-content">
+                    <a href="#">📚 View Results</a>
+                    <a href="#">📅 Schedule Exams</a>
+                    <a href="#">📋 Question Paper Management</a>
+                    <a href="#">📈 Generate Result</a>
+                    <a href="#">📝 Add Exam</a>
+                    <a href="#">📊 Result Analytics</a>
+                    <a href="#">📈 Subject-wise Performance Reports</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">👨 Teacher & Faculty</a>
+                <div class="dropdown-content">
+                    <a href="#">🗂 Staff Profiles & Records</a>
+                    <a href="#">📚 Add Teacher & Faculty</a>
+                    <a href="#">📅 Teacher Timetable Management</a>
+                    <a href="#">⏰ Attendance & Leave Tracking</a>
+                    <a href="#">📊 Performance Evaluation</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">📆 Event Management</a>
+                <div class="dropdown-content">
+                    <a href="#">📅 Events Calendar</a>
+                    <a href="#">📢 News & Updates</a>
+                    <a href="#">📸 Photo Gallery</a>
+                    <a href="#">➕ Add New Event</a>
+                    <a href="#">📝 Register for Event</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">🔐 Security & Access</a>
+                <div class="dropdown-content">
+                    <a href="#">🔑 User Management</a>
+                    <a href="#">🔒 Role-based Access Control</a>
+                    <a href="#">🛡️ Data Encryption</a>
+                    <a href="#">📊 Audit Logs</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">⚙️ Settings</a>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('acadamic_year') }}">📅 acadamic Year</a>
+                    <a href="{{ url_for('department')}}">🏢 Departments</a>
+                    <a href="{{url_for('standards_page')}}">📚Manage Standard</a>
+                    <a href="#">👥 Manage Roles</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main two-column container -->
+    <div class="main-container">
+        <!-- Left side: Add acadamic Year -->
+        <div class="add-year-box">
+            <h1>Create acadamic Year</h1>
+            <form method="POST" action="{{ url_for('acadamic_year') }}">
+                <div class="form-group">
+                    <label for="acadamic_year">acadamic Year</label>
+                    <input type="text" id="acadamic_year" name="acadamic_year" required>
+                </div>
+                <button type="submit">Create</button>
+            </form>
+        </div>
+
+        <!-- Right side: acadamic Year List --> 
+        <ul class="year-list">
+    {% for year in years %}
+    <li>
+        <span>{{ year.year_name }}</span>
+        <!-- Edit form --> 
+        <form method="POST" action="{{ url_for('edit_acadamic_year', id=year.id) }}" class="edit-form" style="display:inline;">
+            <input type="text" name="year_name" placeholder="Edit year" required>
+            <button type="submit" class="edit-toggle">Edit</button>
+        </form>
+        <!-- Delete link -->
+        <a href="{{ url_for('delete_acadamic_year', id=year.id) }}" class="delete-btn"
+           onclick="return confirm('Are you sure you want to delete this acadamic year?');">
+           Delete
+        </a>
+    </li>
+    {% else %}
+    <li>No acadamic years added yet.</li>
+    {% endfor %}
+</ul>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".edit-toggle").forEach(function(button) {
+        button.addEventListener("click", function() {
+            // const listItem = this.closest("li");
+            const editForm = listItem.querySelector(".edit-form");
+            const nameSpan = listItem.querySelector("span");
+
+            if (editForm.style.display === "none" || editForm.style.display === "") {
+                editForm.style.display = "flex";
+                nameSpan.style.display = "none";
+                this.textContent = "Cancel";
+            } else {
+                editForm.style.display = "none";
+                nameSpan.style.display = "inline";
+                this.textContent = "Edit";
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>

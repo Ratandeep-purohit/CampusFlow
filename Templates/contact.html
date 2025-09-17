@@ -1,0 +1,136 @@
+<!-- templates/contact.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact - CampusFlow</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='contact.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo">🎓 CampusFlow</div>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('home') }}">Home</a></li>
+        <li><a href="{{ url_for('feature') }}">Features</a></li>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+        <li><a href="{{ url_for('contact') }}">Contact</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+      <nav class="settings-nav">
+  <ul>
+    <li class="dropdown">
+      <a href="#" class="dropbtn">👤 Student</a>
+      <div class="dropdown-content">
+        <a href="#">📋 Student Dashboard</a>
+        <a href="#">📊 Add Student</a>
+        <a href="#">📚 View Student Profiles</a>
+        <a href="#">📅 Student Attendance</a>
+      </div>
+    </li>
+    <li class="dropdown">
+        <a href="#" class="dropbtn"> 💵Fees Management</a>
+        <div class="dropdown-content">
+            <a href="#">💰 View Fees</a>
+            <a href="#">📄 Generate Receipt</a>
+            <a href="#">📊 Fees Analytics</a>
+            <a href="#">📅 Fees Collection</a>
+        </div>
+    </li>
+    <li class="dropdown">
+        <a href="#" class="dropbtn"> 🏫 Exams & Results</a>
+        <div class="dropdown-content">
+            <a href="#">📚 View Results</a>
+            <a href="#">📅 Schedule Exams</a>
+            <a href="#">📋 Question Paper Management</a>
+            <a href="#">📈 Generate Result</a>
+            <a href="#">📝 Add Exam</a>
+            <a href="#">📊 Result Analytics</a>
+            <a href="#">📈 Subject-wise Performance Reports</a>
+    </li>
+    <li class="dropdown">
+        <a href="#" class="dropbtn">👨 Teacher & faculty</a>
+        <div class="dropdown-content">
+            <a href="#">🗂 Staff Profiles & Records</a>
+            <a href="#">📚 Add Teacher & faculty</a>
+            <a href="#">📅 Teacher Timetable Management</a>
+            <a href="#">⏰ Attendance & Leave Tracking</a>
+            <a href="#">📊 Performance Evaluation</a>
+    </li>
+    <li class="dropdown">
+    <a href="#" class="dropbtn">📆 Event Management</a>
+    <div class="dropdown-content">
+        <a href="#">📅 Events Calendar</a>
+        <a href="#">📢 News & Updates</a>
+        <a href="#">📸 Photo Gallery</a>
+        <a href="#">➕ Add New Event</a>
+        <a href="#">📝 Register for Event</a>
+    </div>
+</li>
+    <li class="dropdown">
+        <a href="#" class="dropbtn">🔐 Security & access</a>
+        <div class="dropdown-content">
+            <a href="#">🔑 User Management</a>
+            <a href="#">🔒 Role-based Access Control</a>
+            <a href="#">🛡️ Data Encryption</a>
+            <a href="#">📊 Audit Logs</a>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropbtn">⚙️ Settings</a>
+      <div class="dropdown-content">
+        <a href="{{url_for('acadamic_year')}}">📅 Academic Year</a>
+        <a href="{{ url_for('department')}}">🏢 Departments</a>
+        <a href="{{url_for('standards_page')}}">📚Manage Standard</a>
+        <a href="#">👥 Manage Roles</a>
+      </div>
+    </li>
+    </ul>
+</nav>
+  <section class="contact-hero">
+    <h1>📬 Contact & Feedback</h1>
+    <p>Have questions or suggestions? We'd love to hear from you!</p>
+  </section>
+
+  <!-- Social Media Links Section -->
+  <section class="social-links">
+    <div class="social-card">
+      <i class="fab fa-instagram"></i>
+      <h2>Instagram</h2>
+      <a href="https://www.instagram.com/__be.serious.rajat_/#" target="_blank">Contact Us on Instagram</a>
+    </div>
+
+    <div class="social-card">
+      <i class="fab fa-linkedin"></i>
+      <h2>LinkedIn</h2>
+      <a href="https://www.linkedin.com/in/ratandeep-purohit-ab0309304/" target="_blank">Contact Us in Linkedin</a>
+    </div>
+
+    <div class="social-card">
+      <i class="fab fa-github"></i>
+      <h2>GitHub</h2>
+      <a href="https://github.com/ratandeep-purohit" target="_blank">Explore My more project</a>
+    </div>
+  </section>
+
+  <!-- Feedback Form -->
+  <section class="feedback-form">
+    <h2>Send Feedback</h2>
+    <form action="mailto:yourmail@gmail.com" method="POST" enctype="text/plain">
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="email" name="email" placeholder="Your Email" required />
+      <textarea name="message" rows="6" placeholder="Your Message..." required></textarea>
+      <button type="submit">Submit</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>© 2025 CampusFlow | Made with ❤️ by Ratandeep Purohit</p>
+  </footer>
+
+</body>
+</html>

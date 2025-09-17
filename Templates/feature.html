@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Features - CampusFlow</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='feature.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo">🎓 CampusFlow</div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('feature') }}">Features</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+        <nav class="settings-nav">
+            <ul>
+        <li class="dropdown">
+            <a href="#" class="dropbtn">👤 Student</a>
+            <div class="dropdown-content">
+                <a href="#">📋 Student Dashboard</a>
+                <a href="#">📊 Add Student</a>
+                <a href="#">📚 View Student Profiles</a>
+                <a href="#">📅 Student Attendance</a>
+            </div>
+        </li>
+        <li class="dropdown">
+            <a href="#" class="dropbtn"> 💵Fees Management</a>
+            <div class="dropdown-content">
+                <a href="#">💰 View Fees</a>
+                <a href="#">📄 Generate Receipt</a>
+                <a href="#">📊 Fees Analytics</a>
+                <a href="#">📅 Fees Collection</a>
+            </div>
+        </li>
+        <li class="dropdown">
+            <a href="#" class="dropbtn"> 🏫 Exams & Results</a>
+            <div class="dropdown-content">
+                <a href="#">📚 View Results</a>
+                <a href="#">📅 Schedule Exams</a>
+                <a href="#">📋 Question Paper Management</a>
+                <a href="#">📈 Generate Result</a>
+                <a href="#">📝 Add Exam</a>
+                <a href="#">📊 Result Analytics</a>
+                <a href="#">📈 Subject-wise Performance Reports</a>
+            </div>
+        </li>
+        <li class="dropdown">
+            <a href="#" class="dropbtn">👨 Teacher & faculty</a>
+            <div class="dropdown-content">
+                <a href="#">🗂 Staff Profiles & Records</a>
+                <a href="#">📚 Add Teacher & faculty</a>
+                <a href="#">📅 Manage Timetables</a>
+                <a href="#">📊 Performance Analytics</a>
+            </div>
+            </li>
+        <li class="dropdown">
+            <a href="#" class="dropbtn">📆 Event Management</a>
+            <div class="dropdown-content">
+                   <a href="#">📅 Events Calendar</a>
+                    <a href="#">📢 News & Updates</a>
+                    <a href="#">📸 Photo Gallery</a>
+                    <a href="#">➕ Add New Event</a>
+                    <a href="#">📝 Register for Event</a>
+            </div>
+            </li>
+        <li class="dropdown">
+            <a href="#" class="dropbtn">🔐 Security & access</a>
+                <div class="dropdown-content">
+                    <a href="#">🔑 User Management</a>
+                    <a href="#">🔒 Role-based Access Control</a>
+                    <a href="#">🛡️ Data Encryption</a>
+                    <a href="#">📊 Audit Logs</a>
+            </li>
+        <li class="dropdown">
+            <a href="#" class="dropbtn">⚙️ Settings</a>
+                <div class="dropdown-content">
+                    <a href="{{url_for('acadamic_year')}}">📅 Academic Year</a>
+                    <a href="{{ url_for('department')}}">🏢 Departments</a>
+                    <a href="{{url_for('standards_page')}}">📚Manage Standard</a>
+                    <a href="#">👥 Manage Roles</a>
+                </div>
+            </li>
+            </ul>
+        </nav>
+    <section class="hero">
+        <h1>Discover CampusFlow's Power</h1>
+        <p>Your complete solution for seamless student and academic management.</p>
+    </section>
+
+    <section class="features">
+        <h2>🚀 Key Features</h2>
+        <div class="feature-list">
+            <div class="feature-card">
+                <h3>📋 Attendance Tracker</h3>
+                <p>Track student attendance with real-time updates and intuitive visuals.</p>
+            </div>
+            <div class="feature-card">
+                <h3>📝 Marks & Results</h3>
+                <p>Automatic result calculation, progress reports, and performance graphs.</p>
+            </div>
+            <div class="feature-card">
+                <h3>📚 Course Management</h3>
+                <p>Smart course selection, scheduling, and flexible curriculum support.</p>
+            </div>
+            <div class="feature-card">
+                <h3>👨‍🏫 Faculty Profiles</h3>
+                <p>Manage teacher data, timetables, and teaching subjects in one place.</p>
+            </div>
+            <div class="feature-card">
+                <h3>👨‍🎓 Student Profiles</h3>
+                <p>Detailed academic records, attendance history, and contact info.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔐 Role-Based Access</h3>
+                <p>Secure login system with customized views for Admin, Teachers, and Students.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="benefits">
+        <h2>🎯 Why Choose CampusFlow?</h2>
+        <ul>
+            <li>✅ Simplifies academic tasks with automation.</li>
+            <li>✅ Saves time for teachers, admins, and students.</li>
+            <li>✅ Modern, responsive, and mobile-friendly design.</li>
+            <li>✅ Keeps all your academic data organized securely.</li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>© 2025 CampusFlow | Student Management System | Built with ❤️ by Ratandeep Purohit</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome to Smart Student System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="hero-section">
+    <nav>
+      <div class="logo">🎓 CampusFlow</div>
+      <div class="nav-buttons">
+        <a href="{{ url_for('login') }}" class="btn">Login</a>
+        <a href="{{ url_for('register') }}" class="btn btn-outline">Register</a>
+      </div>
+    </nav>
+
+    <div class="hero-content">
+      <div class="text">
+        <h1>Manage Smarter, Learn Better!</h1>
+        <p>Welcome to CampusFlow — your one-stop solution to manage student records, attendance, performance, and more!</p>
+        <ul>
+          <li>📚 Course Management</li>
+          <li>🧠 Smart Attendance Tracker</li>
+          <li>📊 Performance Analytics</li>
+          <li>🔐 Secure & Easy Login/Registration</li>
+        </ul>
+        <a href="{{ url_for('register') }}" class="cta-button">Get Started</a>
+      </div>
+      <div class="image">
+        <img src="{{ url_for('static', filename='Education-amico.png') }}" alt="Student System" />
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Smart Student System. Made with ❤️</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,236 @@
+/* ---------------- Fonts & Reset ---------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Prompt', sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #0e0e14;
+  color: #f1f1f1;
+  overflow-x: hidden;
+}
+
+/* ---------------- Header ---------------- */
+header {
+  background: linear-gradient(90deg, #0f2027, #203a43, #2c5364);
+  padding: 16px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 24px;
+  color: #00ffe1;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 22px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #ffffff;
+  padding: 8px 14px;
+  transition: 0.3s;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+nav a:hover {
+  background-color: #00ffe1;
+  color: #000;
+}
+
+/* ---------------- Hero Section ---------------- */
+.hero-banner {
+  position: relative;
+  height: 500px;
+  background: linear-gradient(to right, #001f3f, #001133);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero-banner .content {
+  max-width: 900px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 255, 255, 0.3);
+}
+
+.hero-banner h1 {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  color: #00ffe1;
+}
+
+.hero-banner p {
+  font-size: 1.3rem;
+  color: #cfd3dc;
+}
+
+/* ---------------- About Cards ---------------- */
+.animated-about {
+  padding: 60px 10%;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.card {
+  background: #161a1f;
+  border-left: 5px solid #00ffe1;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 255, 255, 0.05);
+  transition: 0.4s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(0, 255, 255, 0.15);
+}
+
+.card h2 {
+  color: #00ffe1;
+  margin-bottom: 15px;
+}
+
+.card p {
+  color: #c5c5c5;
+  font-size: 1.1rem;
+}
+
+/* ---------------- Image Media Blocks ---------------- */
+.media {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+}
+
+.media img {
+  width: 45%;
+  max-width: 420px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 16px;
+  transition: transform 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0, 255, 255, 0.15);
+}
+
+.media img:hover {
+  transform: scale(1.05);
+}
+
+/* ---------------- Footer ---------------- */
+footer {
+  background-color: #10141a;
+  color: #aaa;
+  text-align: center;
+  padding: 20px;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  margin-top: 50px;
+}
+
+/* ---------------- Settings Navigation ---------------- */
+.settings-nav {
+  background: linear-gradient(90deg, #0f2027, #203a43, #2c5364);
+  padding: 14px 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 255, 255, 0.1);
+}
+
+.settings-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.settings-nav a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.settings-nav a:hover {
+  background-color: #00ffe1;
+  color: #000;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* ---------------- Dropdown ---------------- */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.dropbtn:hover {
+  background-color: #00ffe1;
+  color: #000;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
+  min-width: 180px;
+  z-index: 1000;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 255, 255, 0.15);
+  overflow: hidden;
+}
+
+.dropdown-content a {
+  color: #ffffff;
+  padding: 10px 16px;
+  text-decoration: none;
+  display: block;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.dropdown-content a:hover {
+  background-color: #00ffe1;
+  color: #000;
+  box-shadow: inset 0 0 8px rgba(0, 255, 255, 0.4);
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}

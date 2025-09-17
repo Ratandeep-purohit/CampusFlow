@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Orbitron', sans-serif;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: radial-gradient(circle at 20% 30%, #0f2027, #203a43, #2c5364);
+        overflow: hidden;
+    }
+
+    .login-container {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 50px 40px;
+        border-radius: 20px;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.1), 0 0 40px rgba(0, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        width: 400px;
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    h1 {
+        color: #00f5ff;
+        text-align: center;
+        margin-bottom: 30px;
+        letter-spacing: 2px;
+        font-weight: 600;
+        font-size: 1.8rem;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        color: #cceeff;
+        font-size: 0.95rem;
+        margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    select {
+        width: 100%;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.08);
+        border: none;
+        border-radius: 8px;
+        color: #ffffff;
+        font-size: 1rem;
+        outline: none;
+        transition: 0.3s;
+    }
+
+    input:focus,
+    select:focus {
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    }
+
+    button {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(90deg, #00d2ff, #3a47d5);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 0 12px #00f5ff;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        background: linear-gradient(90deg, #3a47d5, #00d2ff);
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 0 18px #00f5ff;
+    }
+
+    .flash-message {
+        padding: 12px;
+        border-radius: 6px;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: white;
+    }
+
+    .flash-message.success {
+        background-color: #28a745;
+    }
+
+    .flash-message.danger {
+        background-color: #dc3545;
+    }
+
+    .flash-message.Warning {
+        background-color: #ffc107;
+        color: #000;
+    }
+
+    .flash-message.gray {
+        background-color: #6c757d;
+    }
+
+    p {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #ccc;
+    }
+
+    a {
+        color: #00f5ff;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    a:hover {
+        color: #ffffff;
+        text-decoration: underline;
+    }
+    select, option {
+    background-color: #fff;   /* dropdown ka background white */
+    color: #000;              /* text black so it’s visible */
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 16px;
+    }
+
+    @keyframes fadeIn {
+        from {
+            transform: translateY(30px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Flash Message Block -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="post" action="/Register.html">
+            <h1>Register</h1>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm_password" required>
+            </div>
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" name="role" required>
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <button type="submit">Register</button>
+            <p style="text-align: center; margin-top: 20px;">
+                <a href="login.html" style="color: #007bff; text-decoration: none;">Already have an account? Login</a>
+            </p>
+        </form>
+    </div>
+</body>
+</html>
