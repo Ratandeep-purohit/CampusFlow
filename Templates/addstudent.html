@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>CampusFlow - Student Management System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='acadamic_year.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='addstudent.css') }}">
 </head>
 <body>
-
-    <!-- Header -->
     <header>
         <div class="logo">📘 CampusFlow</div>
         <nav>
@@ -30,7 +28,7 @@
                 <a href="#" class="dropbtn">👤 Student</a>
                 <div class="dropdown-content">
                     <a href="#">📋 Student Dashboard</a>
-                    <a href="#">📊 Add Student</a>
+                    <a href="{{ url_for('Add_student')}}">📊 Add Student</a>
                     <a href="#">📚 View Student Profiles</a>
                     <a href="#">📅 Student Attendance</a>
                 </div>
@@ -97,61 +95,75 @@
             </li>
         </ul>
     </nav>
-
-    <!-- Main two-column container -->
-    <div class="main-container">
-        <!-- Left side: Add acadamic Year -->
-        <div class="add-year-box">
-            <h1>Create acadamic Year</h1>
-            <form method="POST" action="{{ url_for('acadamic_year') }}">
-                <div class="form-group">
-                    <label for="acadamic_year">acadamic Year</label>
-                    <input type="text" id="acadamic_year" name="acadamic_year" required>
-                </div>
-                <button type="submit">Create</button>
-            </form>
-        </div>
-
-        <!-- Right side: acadamic Year List --> 
-        <ul class="year-list">
-    {% for year in years %}
-    <li>
-        <span>{{ year.year_name }}</span>
-        <!-- Edit form --> 
-        <form method="POST" action="{{ url_for('edit_acadamic_year', id=year.id) }}" class="edit-form" style="display:inline;">
-            <input type="text" name="year_name" placeholder="Edit year" required>
-            <button type="submit" class="edit-toggle">Edit</button>
-        </form>
-        <!-- Delete link -->
-        <a href="{{ url_for('delete_acadamic_year', id=year.id) }}" class="delete-btn"
-           onclick="return confirm('Are you sure you want to delete this acadamic year?');">
-           Delete
-        </a>
-    </li>
-    {% else %}
-    <li>No acadamic years added yet.</li>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      {% if category == 'Emailerror' %}
+        <div class="flash {{ category }}">{{ message }}</div>
+        {% elif category == 'addsuccess' %}
+        <div class="flash {{ category }}">{{ message }}</div>
+        {% elif category == 'adderror' %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endif %}
     {% endfor %}
-</ul>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    document.querySelectorAll(".edit-toggle").forEach(function(button) {
-        button.addEventListener("click", function() {
-            // const listItem = this.closest("li");
-            const editForm = listItem.querySelector(".edit-form");
-            const nameSpan = listItem.querySelector("span");
+  {% endif %}
+{% endwith %}
+        <h2>Add New Student</h2>
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+    <a href="{{ url_for('Add_bulk_student') }}" class="bulk-btn">➕ Add Students in Bulk</a>
+</div>
 
-            if (editForm.style.display === "none" || editForm.style.display === "") {
-                editForm.style.display = "flex";
-                nameSpan.style.display = "none";
-                this.textContent = "Cancel";
-            } else {
-                editForm.style.display = "none";
-                nameSpan.style.display = "inline";
-                this.textContent = "Edit";
-            }
-        });
-    });
-});
-</script>
+        <form action="{{ url_for('Add_student') }}" method="POST">
+            <label for="name">Enter Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email :</label>
+            <input type="text" id="Email" name="email" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" name="phone" required>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required>
+
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required>
+
+            <!--Dropdowns-->
+
+            <label for="acadamic_year"> Acadamic Year</label>
+            <select id="acadamic_year" name="acadamic_year" required>
+                <option value="" disabled selected>Select Acadamic Year</option>
+                {% for y in years %}
+                    <option value="{{ y.id }}">{{ y.year_name }}</option>
+                {% endfor %}
+            </select>
+             <label for="department_id">Department:</label>
+    <select name="department_id" id="department_id" required>
+        <option value="">-- Select Department --</option>
+        {% for d in departments %}
+            <option value="{{ d.id }}">{{ d.department_name }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="standard_id">Standard:</label>
+    <select name="standard_id" id="standard_id" required>
+        <option value="">-- Select Standard --</option>
+        {% for s in standards %}
+            <option value="{{ s.id }}">{{ s.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="division_id">Division:</label>
+    <select name="division_id" id="division_id" required>
+        <option value="">-- Select Division --</option>
+        {% for div in divisions %}
+            <option value="{{ div.id }}">{{ div.name }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Add Student</button>
+</form>
 </body>
 </html>

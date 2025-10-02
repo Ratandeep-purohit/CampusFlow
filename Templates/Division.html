@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CampusFlow - Department Management</title>
+    <title>Division</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='department.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='Division.css') }}">
 </head>
 <body>
-    <!-- Header -->
+     <!-- Header -->
     <header>
         <div class="logo">📘 CampusFlow</div>
         <nav>
@@ -22,7 +22,7 @@
         </nav>
     </header>
 
-    <!-- Settings Navbar -->
+    <!-- Settings Nav -->
     <nav class="settings-nav">
         <ul>
             <li class="dropdown">
@@ -58,10 +58,11 @@
             <li class="dropdown">
                 <a href="#" class="dropbtn">👨 Teacher & Faculty</a>
                 <div class="dropdown-content">
-                    <a href="#">👩‍🏫 Faculty Dashboard</a>
-                    <a href="#">📚 Add Faculty</a>
-                    <a href="#">📊 View Faculty Profiles</a>
-                    <a href="#">📅 Faculty Attendance</a>
+                    <a href="#">🗂 Staff Profiles & Records</a>
+                    <a href="#">📚 Add Teacher & Faculty</a>
+                    <a href="#">📅 Teacher Timetable Management</a>
+                    <a href="#">⏰ Attendance & Leave Tracking</a>
+                    <a href="#">📊 Performance Evaluation</a>
                 </div>
             </li>
             <li class="dropdown">
@@ -77,58 +78,56 @@
             <li class="dropdown">
                 <a href="#" class="dropbtn">🔐 Security & Access</a>
                 <div class="dropdown-content">
-                    <a href="#">🔒 User Management</a>
-                    <a href="#">🔑 Role-Based Access Control</a>
-                    <a href="#">🛡️ Security Settings</a>
+                    <a href="#">🔑 User Management</a>
+                    <a href="#">🔒 Role-based Access Control</a>
+                    <a href="#">🛡️ Data Encryption</a>
                     <a href="#">📊 Audit Logs</a>
                 </div>
             </li>
             <li class="dropdown">
                 <a href="#" class="dropbtn">⚙️ Settings</a>
                 <div class="dropdown-content">
-                    <a href="{{ url_for('acadamic_year') }}">📅 Academic Year</a>
-                    <a href="{{ url_for('department') }}">🏢 Departments</a>
+                    <a href="{{ url_for('acadamic_year') }}">📅 acadamic Year</a>
+                    <a href="{{ url_for('department')}}">🏢 Departments</a>
                     <a href="{{url_for('standards_page')}}">📚Manage Standard</a>
                     <a href="{{url_for('Division_page')}}">✏️Manage Division </a>
                     <a href="{{url_for('roles_page')}}">👥 Manage Roles</a>
+                    
                 </div>
             </li>
         </ul>
     </nav>
-
-    <!-- Main Container -->
+    <!--Main two-column container-->
     <div class="main-container">
-        <!-- Left: Add Department -->
+        <!--left side-->
         <div class="add-year-box">
-            <h2>Add Department</h2>
-            <form method="POST" action="{{ url_for('department') }}">
+            <h1>Create Division</h1>
+            <form method="POST" action="{{url_for('Division_page')}}">
                 <div class="form-group">
-                    <label for="department_name">Department Name:</label>
-                    <input type="text" id="department_name" name="department_name" required>
+                    <label for="Division">Division</label>
+                    <input type="text" id="Division" name="Division" placeholder="Enter Division" required>
                 </div>
-                <button type="submit">Add Department</button>
+                <button type="submit">Add Division</button>
             </form>
         </div>
-
-        <!-- Right: Department List -->
+        <!--right side-->
         <ul class="year-list">
-            {% for dept in departments %}
-            <li>
-                <span>{{ dept.department_name }}</span>
-                <form method="POST" action="{{ url_for('edit_department', id=dept.id) }}" class="edit-form" style="display:inline;">
-                    <input type="text" name="department_name" placeholder="Edit Department" required>
-                    <button type="submit" class="edit-toggle">Edit</button>
-                </form>
-                <a href="{{ url_for('delete_department', id=dept.id) }}" class="delete-btn"
-                   onclick="return confirm('Are you sure you want to delete this department?');">Delete</a>
-            </li>
+            {% for division in Division %}
+                <li>
+                    <span>{{ division.name }}</span>
+                    <form method="POST" action="{{ url_for('Edit_Division',id=division.id) }}" class="edit-form" style="display:inline;">
+                        <input type="text" name="new_name" placeholder="New Name" required>
+                        <button type="submit" class="edit-toggle">Edit</button>
+                    </form>
+                    <!-- Delete form -->
+                     <a href="{{ url_for('Delete_Division', id=division.id) }}" class="delete-btn" 
+                     onclick="return confirm('Are you sure you want to delete this division?');">Delete</a>
+                </li>
             {% else %}
-            <li class="empty-item">No departments available.</li>
+                <li>No divisions available.</li>
             {% endfor %}
         </ul>
-    </div>
-
-<script>
+        <script>
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll(".edit-toggle").forEach(function(button) {
         button.addEventListener("click", function() {
@@ -149,6 +148,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
+    </div>
 </body>
 </html>
-

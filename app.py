@@ -5,9 +5,12 @@ from db import db
 import pymysql
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import check_password_hash
-from model import Register, AcadamicYear, Departments, Standards   # 👈 Standards import karo
+from model import Register, AcadamicYear, Departments, Standards , Roles , Division , Students
 from flask_mail import Message, Mail
 from flask_migrate import Migrate
+import pandas as pd
+from flask import send_file
+import io
 
 csrf = CSRFProtect()
 
@@ -20,8 +23,8 @@ def create_app():
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
     app.config['MAIL_PORT'] = 587
     app.config['MAIL_USE_TLS'] = True
-    app.config['MAIL_USERNAME'] = 'Rajatpurohit183@gmail.com'
-    app.config['MAIL_PASSWORD'] = '198320072011'
+    app.config['MAIL_USERNAME'] = ''
+    app.config['MAIL_PASSWORD'] = ''
     
     mail = Mail(app)
     db.init_app(app)
@@ -136,7 +139,7 @@ def create_app():
     @app.route('/logout')
     def logout():
         session.clear()
-        flash("Logged out successfully.", "info")
+        # flash("Logged out successfully.", "info")
         return redirect(url_for('landing'))
 
     # -------- Departments -------- #
@@ -257,11 +260,247 @@ def create_app():
         db.session.commit()
         flash("Standard deleted successfully!", "success")
         return redirect(url_for('standards_page'))
-    @app.route('/Roles',method=['GET','Post'])
+    @app.route('/Roles',methods=['GET','Post'])
     def roles_page():
-        return render_template('Roles.html')
+        if request.method =='POST':
+            role_name=request.form.get('Roles')
+            if role_name:
+                existing=Roles.query.filter_by(name=role_name).first()
+                if existing:
+                    flash("Role already exists","error")
+                else:
+                    new_role=Roles(name=role_name)
+                    try:
+                        db.session.add(new_role)
+                        db.session.commit()
+                        flash("Role added successfully","success")
+                    except Exception as e:
+                        db.session.rollback()
+                        flash(f"Error adding role: {str(e)}","error")
+            return redirect(url_for('roles_page'))
+        all_roles=Roles.query.all()
+        return render_template('Roles.html',Roles=all_roles)
+    @app.route('/Roles/edit/<int:id>',methods=['GET','POST'])
+    def Edit_Roles(id):
+        role=Roles.query.get_or_404(id)
+        if request.method=='POST':
+            new_role=request.form.get('Roles_name')
+            role.name=new_role
+            db.session.commit()
+            flash("Role updated successfully!","success")
+            return redirect(url_for('roles_page'))
+    @app.route('/Roles/delete/<int:id>',methods=['POST','GET'])
+    def Delete_Roles(id):
+        role=Roles.query.get_or_404(id)
+        db.session.delete(role)
+        db.session.commit()
+        flash("Role deleted successfully!","success")
+        return redirect(url_for('roles_page'))
+    @app.route('/division', methods=['GET', 'POST'])
+    def Division_page():
+        if request.method=="POST":
+            division_name=request.form.get('Division')
+            if division_name:
+                existing=Division.query.filter_by(name=division_name).first()
+                if existing:
+                    flash("Role already exists", "error")
+                else:
+                    new_division=Division(name=division_name)
+                    try:
+                        db.session.add(new_division)
+                        db.session.commit()
+                        flash("Division added suce","sucess")
+                    except Exception as e:
+                        db.session.rollback()
+                        flash(f"Error adding Division: {str(e)}","error")
+            return redirect(url_for('Division_page'))
+        all_division=Division.query.all()
+        return render_template('division.html',Division=all_division)
+    @app.route('/Division/edit/<int:id>',methods=['GET','POST'])
+    def Edit_Division(id):
+        division=Division.query.get_or_404(id)
+        if request.method=='POST':
+            new_division=request.form.get('Division_name')
+            division.name=new_division
+            db.session.commit()
+            flash("Division updated successfully!","success")
+            return redirect(url_for('Division_page'))
+    @app.route('/Division/delete/<int:id>',methods=['POST','GET'])
+    def Delete_Division(id):
+        division=Division.query.get_or_404(id)
+        db.session.delete(division)
+        db.session.commit()
+        flash("Division deleted successfully!","success")
+        return redirect(url_for('Division_page'))
+    @app.route('/Add_student', methods=['GET', 'POST'])
+    def Add_student():
+        if request.method == 'POST':
+            try:
+                name=request.form.get('name')
+                email=request.form.get('email')
+                phone=request.form.get('phone')
+                address=request.form.get('address')
+                date_of_birth=request.form.get('dob')
+                
+                acadamic_year_id=request.form.get('acadamic_year')
+                department_id=request.form.get('department_id')
+                standard_id=request.form.get('standard_id')
+                division_id=request.form.get('division_id')
+                
+                existing_student = Students.query.filter_by(email=email).first()
+                if existing_student:
+                    flash("Error: Student with this email already exists!", "Emailerror")
+                    return redirect(url_for('Add_student'))
+                
+                new_student=Students(
+                    name=name,
+                    email=email,
+                    phone=phone,
+                    address=address,
+                    date_of_birth=date_of_birth,
+                    acadamic_year_id=acadamic_year_id,
+                    department_id=department_id,
+                    standard_id=standard_id,
+                    division_id=division_id
+                )
+                db.session.add(new_student)
+                db.session.commit()
+                flash("Student added successfully!","addsuccess")
+                return redirect(url_for('Add_student'))
+            except Exception as e:
+                db.session.rollback()
+                flash(f"Error adding student: {str(e)}", "adderror")
+                return redirect(url_for('Add_student'))
+        
+        
+        #send dropdown data to template
+        years=AcadamicYear.query.all()
+        departments=Departments.query.all()
+        standards=Standards.query.all()
+        divisions=Division.query.all()
+        
+        return render_template(
+            'addstudent.html',
+            years=years,
+            departments=departments,
+            standards=standards,
+            divisions=divisions     
+        )
+    @app.route('/Add_bulk_student')
+    def Add_bulk_student():
+        return render_template('addbulkstudent.html')
+    @app.route('/download_sample_excel')
+    def download_sample_excel():
+        # Required student columns
+        student_columns = ["name", "email", "phone", "address", "date_of_birth",
+                        "acadamic_year", "department", "standard", "division"]
+
+        # Blank student sheet
+        df_students = pd.DataFrame(columns=student_columns)
+
+        # Write to Excel (only 1 sheet)
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
+            df_students.to_excel(writer, index=False, sheet_name="Students")
+
+        output.seek(0)
+
+        return send_file(output,
+                        as_attachment=True,
+                        download_name="sample_students.xlsx",
+                        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    @app.route('/upload_students', methods=['POST'])
+    def upload_students():
+        file = request.files.get('file')
+        if not file:
+            flash("No file uploaded", "error")
+            return redirect(url_for('Add_bulk_student'))
+
+        try:
+            # Read Excel file
+            df = pd.read_excel(file)
+            df.columns = df.columns.str.strip().str.lower()  # normalize column names
+        except Exception as e:
+            flash(f"Error reading Excel file: {str(e)}", "error")
+            return redirect(url_for('Add_bulk_student'))
+
+        required_columns = ["name", "email", "phone", "address", "date_of_birth",
+                            "acadamic_year", "department", "standard", "division"]
+
+        # Check for missing columns
+        missing_cols = [col for col in required_columns if col not in df.columns]
+        if missing_cols:
+            flash(f"Missing columns: {', '.join(missing_cols)}", "error")
+            return redirect(url_for('Add_bulk_student'))
+
+        inserted = 0
+        errors = []
+        new_students_list = []
+
+        for index, row in df.iterrows():
+            try:
+                # Validate Academic Year
+                acad_year = AcadamicYear.query.filter_by(year_name=row["acadamic_year"]).first()
+                if not acad_year:
+                    errors.append(f"Row {index+2}: Invalid Academic Year '{row['acadamic_year']}'")
+                    continue
+
+                # Validate Department
+                dept = Departments.query.filter_by(department_name=row["department"]).first()
+                if not dept:
+                    errors.append(f"Row {index+2}: Invalid Department '{row['department']}'")
+                    continue
+
+                # Validate Standard
+                std = Standards.query.filter_by(name=row["standard"]).first()
+                if not std:
+                    errors.append(f"Row {index+2}: Invalid Standard '{row['standard']}'")
+                    continue
+
+                # Validate Division
+                div = Division.query.filter_by(name=row["division"]).first()
+                if not div:
+                    errors.append(f"Row {index+2}: Invalid Division '{row['division']}'")
+                    continue
+
+                # Check duplicate email
+                if Students.query.filter_by(email=row["email"]).first():
+                    errors.append(f"Row {index+2}: Duplicate Email '{row['email']}'")
+                    continue
+
+                # Create Student object
+                new_student = Students(
+                    name=row["name"],
+                    email=row["email"],
+                    phone=row["phone"],
+                    address=row["address"],
+                    date_of_birth=row["date_of_birth"],
+                    acadamic_year_id=acad_year.id,
+                    department_id=dept.id,
+                    standard_id=std.id,
+                    division_id=div.id
+                )
+                new_students_list.append(new_student)
+                inserted += 1
+
+            except Exception as e:
+                errors.append(f"Row {index+2}: {str(e)}")
+
+        # Bulk insert
+        if new_students_list:
+            db.session.bulk_save_objects(new_students_list)
+            db.session.commit()
+
+        # Flash messages
+        if inserted:
+            flash(f"{inserted} students added successfully.", "addstudentsuccess")
+        if errors:
+            flash("Errors:\n" + "\n".join(errors), "addstudenterror")
+
+        return redirect(url_for('Add_bulk_student'))
 
     return app
+    
 
 
 if __name__ == '__main__':

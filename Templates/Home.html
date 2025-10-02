@@ -28,7 +28,7 @@
       <a href="#" class="dropbtn">👤 Student</a>
       <div class="dropdown-content">
         <a href="#">📋 Student Dashboard</a>
-        <a href="#">📊 Add Student</a>
+        <a href="{{ url_for('Add_student')}}">📊 Add Student</a>
         <a href="#">📚 View Student Profiles</a>
         <a href="#">📅 Student Attendance</a>
       </div>
@@ -86,7 +86,8 @@
         <a href="{{url_for('acadamic_year')}}">📅 Academic Year</a>
         <a href="{{url_for('department')}}">🏢 Departments</a>
         <a href="{{url_for('standards_page')}}">📚Manage Standard</a>
-        <a href="#">👥 Manage Roles</a>
+        <a href="{{url_for('Division_page')}}">✏️Manage Division </a>
+        <a href="{{url_for('roles_page')}}">👥 Manage Roles</a>
       </div>
     </li>
     </ul>

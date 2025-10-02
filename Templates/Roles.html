@@ -89,7 +89,8 @@
                     <a href="{{ url_for('acadamic_year') }}">📅 acadamic Year</a>
                     <a href="{{ url_for('department')}}">🏢 Departments</a>
                     <a href="{{url_for('standards_page')}}">📚Manage Standard</a>
-                    <a href="#">👥 Manage Roles</a>
+                    <a href="{{url_for('Division_page')}}">✏️Manage Division </a>
+                    <a href="{{url_for('roles_page')}}">👥 Manage Roles</a>
                 </div>
             </li>
         </ul>
@@ -111,21 +112,43 @@
 
         <!--Right side: Roles list-->
         <ul class="year-list">
-            {% for Role in Roles %}
+            {% for role in Roles %}
             <li>
-                <span>{{Role.Roles_name}}</span>
+                <span>{{role.name}}</span>
                 <!--Edit form-->
-                <form method="POST" action="{{ url_for('Edit_Roles') ,id=Role.id }}" class="edit-form" style="display: inline;">
+                <form method="POST" action="{{ url_for('Edit_Roles' ,id=role.id )}}" class="edit-form" style="display: inline;">
                     <input type="text" name="Roles_name" placeholder="Edit Roles" required>
                     <button type="submit" class="edit-toggle">Edit</button>
                 </form>
-                <a href="{{ url_for('delete_roles',id=Role.id)}}" class="delete-btn"
+                <a href="{{ url_for('Delete_Roles',id=role.id)}}" class="delete-btn"
                 onclick="return confirm('Are you sure you want to delete this Role?');">
                 Delete
             </a>
             </li>
+            {% else %}
+            <li>No Roles added yet</li>
+            {% endfor %}
         </ul>
-    </div>
-    
-</body>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".edit-toggle").forEach(function(button) {
+        button.addEventListener("click", function() {
+            // const listItem = this.closest("li");
+            const editForm = listItem.querySelector(".edit-form");
+            const nameSpan = listItem.querySelector("span");
+
+            if (editForm.style.display === "none" || editForm.style.display === "") {
+                editForm.style.display = "flex";
+                nameSpan.style.display = "none";
+                this.textContent = "Cancel";
+            } else {
+                editForm.style.display = "none";
+                nameSpan.style.display = "inline";
+                this.textContent = "Edit";
+            }
+        });
+    });
+});
+</script>
+    </body>
 </html>

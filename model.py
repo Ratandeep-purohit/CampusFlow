@@ -54,7 +54,14 @@ class Roles(db.Model):
     def __repr__(self):
         return f'<Roles {self.name}>'
     
+class Division(db.Model):
+    __tablename__ = "division"
 
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+
+    def __repr__(self):
+        return f"<Division {self.name}>"
 
 class Students(UserMixin, db.Model):
     __tablename__ = 'students'
@@ -65,13 +72,17 @@ class Students(UserMixin, db.Model):
     phone = db.Column(db.String(15), nullable=False)
     address = db.Column(db.String(250), nullable=False)
     date_of_birth = db.Column(db.Date, nullable=False)
+    
     acadamic_year_id = db.Column(db.Integer, db.ForeignKey('acadamic_years.id'), nullable=False)
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     standard_id = db.Column(db.Integer, db.ForeignKey('standards.id'), nullable=False)
+    division_id = db.Column(db.Integer, db.ForeignKey('division.id'), nullable=False)
+
 
     acadamic_year = db.relationship('AcadamicYear', backref='students')
     department = db.relationship('Departments', backref='students')
     standard = db.relationship('Standards', backref='students')
+    division=db.relationship('Division', backref='students')
 
     def __repr__(self):
         return f'<Student {self.name}>'

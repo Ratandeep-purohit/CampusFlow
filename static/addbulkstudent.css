@@ -1,0 +1,263 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: #0e0e14;
+    color: #ffffff;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Header */
+header {
+    background: #14141f;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px; /* spacing below header */
+}
+
+header .logo {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+header nav ul {
+    display: flex;
+    list-style: none;
+}
+
+header nav ul li {
+    margin-left: 20px;
+}
+
+header nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+header nav ul li a:hover,
+header nav ul li a:focus {
+    color: #007bff;
+    outline: none;
+}
+
+/* Settings Nav */
+.settings-nav {
+    background: #1b1b28;
+    padding: 10px 20px;
+    margin-bottom: 30px; /* spacing below nav */
+}
+
+.settings-nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap; /* wrap on small screens */
+}
+
+.settings-nav ul li {
+    position: relative;
+    margin-right: 30px;
+}
+
+.settings-nav .dropbtn {
+    color: #fff;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background 0.3s;
+    background: none;
+    border: none;
+}
+
+.settings-nav .dropbtn:hover,
+.settings-nav .dropbtn:focus {
+    background: #007bff;
+    outline: none;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background: #14141f;
+    min-width: 220px;
+    top: 40px;
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 1000;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 10px 16px;
+    color: #fff;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.dropdown-content a:hover,
+.dropdown-content a:focus {
+    background: #007bff;
+    outline: none;
+}
+
+.dropdown:hover .dropdown-content,
+.dropdown:focus-within .dropdown-content {
+    display: block;
+}
+
+/* Form Container */
+.container {
+    background: #14141f;
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px 35px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.5);
+}
+
+/* Headings */
+.container h1,
+.container h2,
+.container h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+/* Form Fields */
+form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+form input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 18px;
+    background: #1f1f2e;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    transition: border 0.3s;
+}
+
+form input[type="file"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Buttons */
+.button1,
+.button2,
+button,
+.btn {
+    background: #007bff;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 12px;
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+    margin-top: 15px; /* spacing between fields/buttons */
+}
+
+.button1:hover,
+.button2:hover,
+button:hover,
+.btn:hover,
+.button1:focus,
+.button2:focus,
+button:focus,
+.btn:focus {
+    background: #0056b3;
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    outline: none;
+}
+
+/* Note Text */
+p {
+    margin-top: 20px;
+    color: #ccc;
+    font-size: 14px;
+}
+
+code {
+    background: #1f1f2e;
+    padding: 4px 6px;
+    border-radius: 6px;
+    font-size: 13px;
+    display: block;
+    margin-top: 5px;
+    word-break: break-word;
+}
+.upload-actions {
+    display: flex;
+    justify-content: space-between; /* Upload left, Download right */
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.upload-actions .button1,
+.upload-actions .button2 {
+    width: 48%; /* dono buttons ek line me fit ho jaye */
+}
+.flash {
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.flash-success {
+  background: #28a745;
+  color: #fff;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+}
+
+.flash-error {
+  background: #dc3545;
+  color: #fff;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  white-space: pre-line; /* so that \n in errors shows line break */
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+    header, .settings-nav, .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .settings-nav ul {
+        flex-wrap: wrap;
+    }
+}
