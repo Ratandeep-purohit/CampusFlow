@@ -216,6 +216,9 @@ def create_app():
     @app.route('/acadamic_years/delete/<int:id>', methods=['POST','GET'])
     def delete_acadamic_year(id):
         ay = AcadamicYear.query.get_or_404(id)
+        if ay.students:
+            flash("Cannot delete academic year Because students exist for this year.", "deleteacademicyearerror")
+            return redirect(url_for('acadamic_year'))
         db.session.delete(ay)
         db.session.commit()
         flash("Academic year deleted successfully!", "success")
