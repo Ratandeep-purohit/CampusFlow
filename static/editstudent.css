@@ -1,4 +1,4 @@
-/* General Reset */
+/* Reset */
 * {
     margin: 0;
     padding: 0;
@@ -8,7 +8,7 @@
 body {
     font-family: "Poppins", sans-serif;
     background-color: #0e0e14;
-    color: #ffffff;
+    color: #fff;
     line-height: 1.6;
 }
 
@@ -24,7 +24,7 @@ header {
 header .logo {
     font-size: 22px;
     font-weight: 700;
-    color: #ffffff;
+    color: #fff;
 }
 
 header nav ul {
@@ -37,7 +37,7 @@ header nav ul li {
 }
 
 header nav ul li a {
-    color: #ffffff;
+    color: #fff;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s;
@@ -114,6 +114,7 @@ header nav ul li a:hover {
     border-radius: 12px;
     box-shadow: 0px 4px 10px rgba(0,0,0,0.4);
 }
+
 .flash {
     padding: 10px;
     margin-bottom: 15px;
@@ -132,12 +133,8 @@ header nav ul li a:hover {
     color: #721c24;
     border: 1px solid #f5c6cb;
 }
-.flash.dropdownerror {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
 
+/* Form */
 .container h2 {
     text-align: center;
     margin-bottom: 20px;
@@ -145,7 +142,6 @@ header nav ul li a:hover {
     font-size: 22px;
 }
 
-/* Form Fields */
 form label {
     display: block;
     margin-bottom: 6px;
@@ -171,7 +167,6 @@ form select:focus {
     outline: none;
 }
 
-/* Button */
 button {
     background: #007bff;
     border: none;
@@ -187,21 +182,3 @@ button {
 button:hover {
     background: #0056b3;
 }
-.bulk-btn {
-    background-color: #007bff;  /* Blue button */
-    color: white;
-    padding: 10px 18px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 14px;
-    transition: 0.3s;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.bulk-btn:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-}
-

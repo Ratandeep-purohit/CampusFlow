@@ -27,7 +27,7 @@
             <li class="dropdown">
                 <a href="#" class="dropbtn">👤 Student</a>
                 <div class="dropdown-content">
-                    <a href="#">📋 Student Dashboard</a>
+                    <a href="{{ url_for('student_dashboard')}}">📋 Student Dashboard</a>
                     <a href="{{ url_for('Add_student')}}">📊 Add Student</a>
                     <a href="#">📚 View Student Profiles</a>
                     <a href="#">📅 Student Attendance</a>
@@ -105,21 +105,23 @@
         <div class="flash {{ category }}">{{ message }}</div>
         {% elif category == 'adderror' %}
         <div class="flash {{ category }}">{{ message }}</div>
+        {% elif category == 'dropdownerror' %}
+        <div class="flash {{ category }}">{{ message }}</div>
       {% endif %}
     {% endfor %}
   {% endif %}
 {% endwith %}
-        <h2>Add New Student</h2>
+         <h2>Add New Student</h2>
         <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
-    <a href="{{ url_for('Add_bulk_student') }}" class="bulk-btn">➕ Add Students in Bulk</a>
-</div>
+            <a href="{{ url_for('Add_bulk_student') }}" class="bulk-btn">➕ Add Students in Bulk</a>
+        </div>
 
         <form action="{{ url_for('Add_student') }}" method="POST">
             <label for="name">Enter Name:</label>
             <input type="text" id="name" name="name" required>
 
             <label for="email">Email :</label>
-            <input type="text" id="Email" name="email" required>
+            <input type="email" id="email" name="email" required>
 
             <label for="phone">Phone Number:</label>
             <input type="text" id="phone" name="phone" required>
@@ -130,40 +132,40 @@
             <label for="dob">Date of Birth:</label>
             <input type="date" id="dob" name="dob" required>
 
-            <!--Dropdowns-->
-
-            <label for="acadamic_year"> Acadamic Year</label>
-            <select id="acadamic_year" name="acadamic_year" required>
-                <option value="" disabled selected>Select Acadamic Year</option>
+            <label for="academic_year">Academic Year</label>
+            <select id="academic_year" name="academic_year" required>
+                <option value="" disabled selected>Select Academic Year</option>
                 {% for y in years %}
                     <option value="{{ y.id }}">{{ y.year_name }}</option>
                 {% endfor %}
             </select>
-             <label for="department_id">Department:</label>
-    <select name="department_id" id="department_id" required>
-        <option value="">-- Select Department --</option>
-        {% for d in departments %}
-            <option value="{{ d.id }}">{{ d.department_name }}</option>
-        {% endfor %}
-    </select>
 
-    <label for="standard_id">Standard:</label>
-    <select name="standard_id" id="standard_id" required>
-        <option value="">-- Select Standard --</option>
-        {% for s in standards %}
-            <option value="{{ s.id }}">{{ s.name }}</option>
-        {% endfor %}
-    </select>
+            <label for="department_id">Department:</label>
+            <select name="department_id" id="department_id" required>
+                <option value="">-- Select Department --</option>
+                {% for d in departments %}
+                    <option value="{{ d.id }}">{{ d.department_name }}</option>
+                {% endfor %}
+            </select>
 
-    <label for="division_id">Division:</label>
-    <select name="division_id" id="division_id" required>
-        <option value="">-- Select Division --</option>
-        {% for div in divisions %}
-            <option value="{{ div.id }}">{{ div.name }}</option>
-        {% endfor %}
-    </select>
+            <label for="standard_id">Standard:</label>
+            <select name="standard_id" id="standard_id" required>
+                <option value="">-- Select Standard --</option>
+                {% for s in standards %}
+                    <option value="{{ s.id }}">{{ s.name }}</option>
+                {% endfor %}
+            </select>
 
-    <button type="submit">Add Student</button>
-</form>
+            <label for="division_id">Division:</label>
+            <select name="division_id" id="division_id" required>
+                <option value="">-- Select Division --</option>
+                {% for div in divisions %}
+                    <option value="{{ div.id }}">{{ div.name }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Add Student</button>
+        </form>
+    </div>
 </body>
 </html>

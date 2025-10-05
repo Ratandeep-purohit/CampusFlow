@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_sqlalchemy import SQLAlchemy
 from config import Config
 from db import db
+import csv
 import pymysql
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import check_password_hash
@@ -342,7 +343,7 @@ def create_app():
                 address=request.form.get('address')
                 date_of_birth=request.form.get('dob')
                 
-                acadamic_year_id=request.form.get('acadamic_year')
+                acadamic_year_id=request.form.get('academic_year')
                 department_id=request.form.get('department_id')
                 standard_id=request.form.get('standard_id')
                 division_id=request.form.get('division_id')
@@ -363,6 +364,9 @@ def create_app():
                     standard_id=standard_id,
                     division_id=division_id
                 )
+                if not acadamic_year_id or not department_id or not standard_id or not division_id:
+                    flash("Error: All dropdowns must be selected!", "dropdownerror")
+                    return redirect(url_for('Add_student'))
                 db.session.add(new_student)
                 db.session.commit()
                 flash("Student added successfully!","addsuccess")
@@ -498,7 +502,168 @@ def create_app():
             flash("Errors:\n" + "\n".join(errors), "addstudenterror")
 
         return redirect(url_for('Add_bulk_student'))
+    @app.route('/student_dashboard', methods=['GET', 'POST'])
+    def student_dashboard():
+        years = AcadamicYear.query.all()
+        departments = Departments.query.all()
+        standards = Standards.query.all()
+        divisions = Division.query.all()
+        
+        students = []  # default empty
+        selected_filters = {
+            'acadamic_year': None,
+            'department_id': None,
+            'standard_id': None,
+            'division_id': None
+        }
 
+        if request.method == 'POST':
+            selected_filters['acadamic_year'] = request.form.get('acadamic_year')
+            selected_filters['department_id'] = request.form.get('department_id')
+            selected_filters['standard_id'] = request.form.get('standard_id')
+            selected_filters['division_id'] = request.form.get('division_id')
+
+            # Only fetch students if all filters are selected
+            if all(selected_filters.values()):
+                students = Students.query.filter_by(
+                    acadamic_year_id=selected_filters['acadamic_year'],
+                    department_id=selected_filters['department_id'],
+                    standard_id=selected_filters['standard_id'],
+                    division_id=selected_filters['division_id']
+                ).all()
+                if not students:
+                    flash("No students found for the selected criteria.","nostudent")
+
+        return render_template(
+            'student_dashboard.html',
+            years=years,
+            departments=departments,
+            standards=standards,
+            divisions=divisions,
+            students=students,
+            selected_filters=selected_filters
+        )
+    @app.route('/delete_student/<int:student_id>', methods=['POST'])
+    def delete_student(student_id):
+        student = Students.query.get_or_404(student_id)
+        try:
+            db.session.delete(student)
+            db.session.commit()
+            flash("Student deleted successfully!", "deletesuccess")
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Error deleting student: {str(e)}", "deleteerror")
+        return redirect(url_for('student_dashboard',acadamic_year=request.form.get('acadamic_year'),
+                            department_id=request.form.get('department_id'),
+                            standard_id=request.form.get('standard_id'),
+                            division_id=request.form.get('division_id')))
+    @app.route('/edit_student/<int:student_id>', methods=['GET', 'POST'])
+    def edit_student(student_id):
+        student = Students.query.get_or_404(student_id)
+        years = AcadamicYear.query.all()
+        departments = Departments.query.all()
+        standards = Standards.query.all()
+        divisions = Division.query.all()
+
+        if request.method == 'POST':
+            student.name = request.form['name']
+            student.email = request.form['email']
+            student.phone = request.form['phone']
+            student.address = request.form['address']
+            student.date_of_birth = request.form['dob']
+            student.acadamic_year_id = request.form['acadamic_year']
+            student.department_id = request.form['department_id']
+            student.standard_id = request.form['standard_id']
+            student.division_id = request.form['division_id']
+            db.session.commit()
+            flash("Student updated successfully!", "success")
+            return redirect(url_for('student_dashboard'))
+
+        return render_template('editstudent.html', student=student, years=years, departments=departments, standards=standards, divisions=divisions)
+    @app.route('/bulk_delete_students', methods=['POST'])
+    def bulk_delete_students():
+        student_ids = request.form.get('student_ids')
+        if student_ids:
+            ids_list = student_ids.split(',')
+            Students.query.filter(Students.id.in_(ids_list)).delete(synchronize_session=False)
+            db.session.commit()
+            flash(f'{len(ids_list)} students deleted successfully!', 'success')
+        else:
+            flash('No students selected.', 'error')
+        return redirect(url_for('student_dashboard'))
+    @app.route('/export_students', methods=['POST'])
+    def export_students():
+        from io import StringIO
+        import csv
+
+        # 1️⃣ Get selected student IDs (agar checkbox se aaye ho)
+        student_ids = request.form.get('student_ids', '')
+        student_ids = [int(sid) for sid in student_ids.split(',') if sid.strip().isdigit()]
+
+        # 2️⃣ Get filters
+        acadamic_year = request.form.get('acadamic_year')
+        department_id = request.form.get('department_id')
+        standard_id = request.form.get('standard_id')
+        division_id = request.form.get('division_id')
+
+        # 3️⃣ Query base
+        query = Students.query
+
+        # agar selected students diye hain → wahi export karo
+        if student_ids:
+            query = query.filter(Students.id.in_(student_ids))
+
+        # agar selected nahi, lekin filter diya gaya hai → filter apply karo
+        elif any([acadamic_year, department_id, standard_id, division_id]):
+            if acadamic_year:
+                query = query.filter_by(acadamic_year_id=acadamic_year)
+            if department_id:
+                query = query.filter_by(department_id=department_id)
+            if standard_id:
+                query = query.filter_by(standard_id=standard_id)
+            if division_id:
+                query = query.filter_by(division_id=division_id)
+
+        # agar na select na filter → sabhi students
+        else:
+            query = Students.query
+
+        students = query.all()
+
+        # agar koi student hi nahi mila
+        if not students:
+            flash("No students found for export.", "error")
+            return redirect(url_for('students_page'))
+
+        # 4️⃣ CSV generate karo
+        output = StringIO()
+        writer = csv.writer(output)
+
+        writer.writerow([
+            'Name', 'Email', 'Phone', 'Address', 'Date of Birth',
+            'Academic Year', 'Department', 'Standard', 'Division'
+        ])
+
+        for s in students:
+            writer.writerow([
+                s.name,
+                s.email,
+                s.phone,
+                s.address,
+                s.date_of_birth.strftime('%Y-%m-%d') if s.date_of_birth else '',
+                s.acadamic_year.year_name if s.acadamic_year else '',
+                s.department.department_name if s.department else '',
+                s.standard.name if s.standard else '',
+                s.division.name if s.division else ''
+            ])
+
+        output.seek(0)
+        return send_file(
+            io.BytesIO(output.getvalue().encode()),
+            mimetype='text/csv',
+            as_attachment=True,
+            download_name='filtered_students.csv'
+        )   
     return app
     
 
