@@ -350,10 +350,12 @@ def create_app():
         if request.method == 'POST':
             try:
                 name=request.form.get('name')
+                enrollment_number=request.form.get('enrollment_number')
                 email=request.form.get('email')
                 phone=request.form.get('phone')
                 address=request.form.get('address')
                 date_of_birth=request.form.get('dob')
+                date_of_addmission=request.form.get('doa')
                 
                 acadamic_year_id=request.form.get('academic_year')
                 department_id=request.form.get('department_id')
@@ -367,10 +369,12 @@ def create_app():
                 
                 new_student=Students(
                     name=name,
+                    enrollment_number=enrollment_number,
                     email=email,
                     phone=phone,
                     address=address,
                     date_of_birth=date_of_birth,
+                    date_of_addmission=date_of_addmission,
                     acadamic_year_id=acadamic_year_id,
                     department_id=department_id,
                     standard_id=standard_id,
@@ -408,7 +412,7 @@ def create_app():
     @app.route('/download_sample_excel')
     def download_sample_excel():
         # Required student columns
-        student_columns = ["name", "email", "phone", "address", "date_of_birth",
+        student_columns = ["name","enrollment number", "email", "phone", "address", "date_of_birth","date_of_addmission",
                         "acadamic_year", "department", "standard", "division"]
 
         # Blank student sheet
@@ -440,7 +444,7 @@ def create_app():
             flash(f"Error reading Excel file: {str(e)}", "error")
             return redirect(url_for('Add_bulk_student'))
 
-        required_columns = ["name", "email", "phone", "address", "date_of_birth",
+        required_columns = ["name","enrollment number", "email", "phone", "address", "date_of_birth","date_of_addmission",
                             "acadamic_year", "department", "standard", "division"]
 
         # Check for missing columns
@@ -487,10 +491,12 @@ def create_app():
                 # Create Student object
                 new_student = Students(
                     name=row["name"],
+                    enrollment_number=row["enrollment number"],
                     email=row["email"],
                     phone=row["phone"],
                     address=row["address"],
                     date_of_birth=row["date_of_birth"],
+                    date_of_addmission=row["date_of_addmission"],
                     acadamic_year_id=acad_year.id,
                     department_id=dept.id,
                     standard_id=std.id,
@@ -579,10 +585,12 @@ def create_app():
 
         if request.method == 'POST':
             student.name = request.form['name']
+            student.enrollment_number = request.form['enrollment_number']
             student.email = request.form['email']
             student.phone = request.form['phone']
             student.address = request.form['address']
             student.date_of_birth = request.form['dob']
+            student.date_of_addmission = request.form['doa']
             student.acadamic_year_id = request.form['acadamic_year']
             student.department_id = request.form['department_id']
             student.standard_id = request.form['standard_id']
@@ -652,17 +660,19 @@ def create_app():
         writer = csv.writer(output)
 
         writer.writerow([
-            'Name', 'Email', 'Phone', 'Address', 'Date of Birth',
-            'Academic Year', 'Department', 'Standard', 'Division'
+            'Name','Enrollment number','Email', 'Phone', 'Address', 'Date of Birth',
+            'Date of admission','Academic Year', 'Department', 'Standard', 'Division'
         ])
 
         for s in students:
             writer.writerow([
                 s.name,
+                s.enrollment_number,
                 s.email,
                 s.phone,
                 s.address,
                 s.date_of_birth.strftime('%Y-%m-%d') if s.date_of_birth else '',
+                s.date_of_addmission.strftime('%Y-%m-%d') if s.date_of_addmission else '',
                 s.acadamic_year.year_name if s.acadamic_year else '',
                 s.department.department_name if s.department else '',
                 s.standard.name if s.standard else '',

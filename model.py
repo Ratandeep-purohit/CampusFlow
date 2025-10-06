@@ -62,16 +62,50 @@ class Division(db.Model):
 
     def __repr__(self):
         return f"<Division {self.name}>"
+class Faculty_Department(db.Model):
+    __tablename__ = 'faculty_department'
+    
+    id=db.Column(db.Integer,primary_key=True)
+    name=db.Column(db.String(100),nullable=False)
+    
+    def __repr__(self):
+        return f"<Faculty_Department {self.name}>"
+    
+class Faculty(db.Model):
+    __tablename__='faculty'
+    
+    id=db.Column(db.Integer,primary_key=True)
+    name=db.Column(db.String(150),nullable=False)
+    email=db.Column(db.String(150),unique=True,nullable=False)
+    phone=db.Column(db.String(15),nullable=False)
+    gender=db.Column(db.String(10),nullable=False)
+    address=db.Column(db.String(250),nullable=False)
+    city=db.Column(db.String(100),nullable=False)
+    state=db.Column(db.String(100),nullable=False)
+    pincode=db.Column(db.String(10),nullable=False)
+    date_of_birth=db.Column(db.Date,nullable=False)
+    joining_date=db.Column(db.Date,nullable=False)
+    qualification=db.Column(db.String(150),nullable=False)
+    experience=db.Column(db.String(100),nullable=False)
+    faculty_department_id=db.Column(db.Integer,db.ForeignKey('faculty_department.id'),nullable=False)
+    
+    Faculty_Department=db.relationship('Faculty_Department',backref='faculty')
+    def __repr__(self):
+        return f'<Faculty{self.name}>'
 
 class Students(UserMixin, db.Model):
     __tablename__ = 'students'
     
     id = db.Column(db.Integer, primary_key=True)
+    enrollment_number = db.Column(db.String(100), unique=True, nullable=False)
     name = db.Column(db.String(150), nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     phone = db.Column(db.String(15), nullable=False)
     address = db.Column(db.String(250), nullable=False)
     date_of_birth = db.Column(db.Date, nullable=False)
+    date_of_addmission = db.Column(db.Date, nullable=True)
+    # gender= db.Column(db.String(10), nullable=True)
+    
     
     acadamic_year_id = db.Column(db.Integer, db.ForeignKey('acadamic_years.id'), nullable=False)
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
