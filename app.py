@@ -177,6 +177,9 @@ def create_app():
     @app.route('/departments/delete/<int:id>', methods=['POST','GET'])
     def delete_department(id):
         dept = Departments.query.get_or_404(id)
+        if dept.students:
+            flash("Cannot delete department Because students exist for this department.", "deletedepterror")
+            return redirect(url_for('department'))
         db.session.delete(dept)
         db.session.commit()
         flash("Department deleted successfully!", "success")
@@ -260,6 +263,9 @@ def create_app():
     @app.route('/standards/delete/<int:id>', methods=['POST','GET'])
     def delete_standards(id):
         st = Standards.query.get_or_404(id)
+        if st.students:
+            flash("Cannot delete standard Because students exist for this standard.", "deletestandarderror")
+            return redirect(url_for('standards_page'))
         db.session.delete(st)
         db.session.commit()
         flash("Standard deleted successfully!", "success")
@@ -332,6 +338,9 @@ def create_app():
     @app.route('/Division/delete/<int:id>',methods=['POST','GET'])
     def Delete_Division(id):
         division=Division.query.get_or_404(id)
+        if division.students:
+            flash("Cannot delete Division Because students exist for this Division.", "deletedivisionerror")
+            return redirect(url_for('Division_page'))
         db.session.delete(division)
         db.session.commit()
         flash("Division deleted successfully!","success")
