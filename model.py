@@ -104,8 +104,12 @@ class Students(UserMixin, db.Model):
     address = db.Column(db.String(250), nullable=False)
     date_of_birth = db.Column(db.Date, nullable=False)
     date_of_addmission = db.Column(db.Date, nullable=True)
-    # gender= db.Column(db.String(10), nullable=True)
-    
+    gender= db.Column(db.String(10), nullable=True)
+    nationality=db.Column(db.String(50),nullable=True)
+    religion=db.Column(db.String(50),nullable=True)
+    category=db.Column(db.String(50),nullable=True)
+    father_name=db.Column(db.String(150),nullable=True)
+    mother_name=db.Column(db.String(150),nullable=True)
     
     acadamic_year_id = db.Column(db.Integer, db.ForeignKey('acadamic_years.id'), nullable=False)
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)

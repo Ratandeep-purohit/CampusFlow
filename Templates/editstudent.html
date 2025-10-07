@@ -103,6 +103,9 @@
             <label for="name">Enter Name:</label>
             <input type="text" id="name" name="name" value="{{ student.name }}" required>
 
+            <label for="enrollment_number">Enrollment Number:</label>
+            <input type="text" id="enrollment_number" name="enrollment_number" value="{{ student.enrollment_number }}" required>
+
             <label for="email">Email :</label>
             <input type="email" id="email" name="email" value="{{ student.email }}" required>
 
@@ -117,7 +120,29 @@
 
             <label for="doa">Date of Admission:</label>
             <input type="date" id="doa" name="doa" value="{{ student.date_of_addmission }}" required>
-            
+
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="Male" {% if student.gender == 'Male' %}selected{% endif %}>Male</option>
+                <option value="Female" {% if student.gender == 'Female' %}selected{% endif %}>Female</option>
+                <option value="Other" {% if student.gender == 'Other' %}selected{% endif %}>Other</option>
+            </select>
+
+            <label for="father_name">Father's Name:</label>
+            <input type="text" id="father_name" name="father_name" value="{{ student.father_name }}">
+
+            <label for="mother_name">Mother's Name:</label>
+            <input type="text" id="mother_name" name="mother_name" value="{{ student.mother_name }}">
+
+            <label for="nationality">Nationality:</label>
+            <input type="text" id="nationality" name="nationality" value="{{ student.nationality }}">
+
+            <label for="religion">Religion:</label>
+            <input type="text" id="religion" name="religion" value="{{ student.religion }}">
+
+            <label for="category">Category:</label>
+            <input type="text" id="category" name="category" value="{{ student.category }}">
+
             <!-- Dropdowns -->
             <label for="acadamic_year">Acadamic Year</label>
             <select id="acadamic_year" name="acadamic_year" required>

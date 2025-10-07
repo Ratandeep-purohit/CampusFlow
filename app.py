@@ -356,6 +356,13 @@ def create_app():
                 address=request.form.get('address')
                 date_of_birth=request.form.get('dob')
                 date_of_addmission=request.form.get('doa')
+                gender=request.form.get('gender')
+                father_name=request.form.get('father_name')
+                mother_name=request.form.get('mother_name')
+                nationality=request.form.get('nationality')
+                religion=request.form.get('religion')
+                category=request.form.get('category')
+                
                 
                 acadamic_year_id=request.form.get('academic_year')
                 department_id=request.form.get('department_id')
@@ -375,6 +382,12 @@ def create_app():
                     address=address,
                     date_of_birth=date_of_birth,
                     date_of_addmission=date_of_addmission,
+                    gender=gender,
+                    father_name=father_name,
+                    mother_name=mother_name,
+                    nationality=nationality,
+                    religion=religion,
+                    category=category,
                     acadamic_year_id=acadamic_year_id,
                     department_id=department_id,
                     standard_id=standard_id,
@@ -413,6 +426,7 @@ def create_app():
     def download_sample_excel():
         # Required student columns
         student_columns = ["name","enrollment number", "email", "phone", "address", "date_of_birth","date_of_addmission",
+                           "gender", "father_name", "mother_name", "nationality", "religion", "category",
                         "acadamic_year", "department", "standard", "division"]
 
         # Blank student sheet
@@ -445,6 +459,7 @@ def create_app():
             return redirect(url_for('Add_bulk_student'))
 
         required_columns = ["name","enrollment number", "email", "phone", "address", "date_of_birth","date_of_addmission",
+                            "gender", "father_name", "mother_name", "nationality", "religion", "category",
                             "acadamic_year", "department", "standard", "division"]
 
         # Check for missing columns
@@ -497,6 +512,12 @@ def create_app():
                     address=row["address"],
                     date_of_birth=row["date_of_birth"],
                     date_of_addmission=row["date_of_addmission"],
+                    gender=row["gender"],
+                    father_name=row["father_name"],
+                    mother_name=row["mother_name"],
+                    nationality=row["nationality"],
+                    religion=row["religion"],
+                    category=row["category"],
                     acadamic_year_id=acad_year.id,
                     department_id=dept.id,
                     standard_id=std.id,
@@ -591,6 +612,12 @@ def create_app():
             student.address = request.form['address']
             student.date_of_birth = request.form['dob']
             student.date_of_addmission = request.form['doa']
+            student.gender = request.form['gender']
+            student.father_name = request.form['father_name']
+            student.mother_name = request.form['mother_name']
+            student.nationality = request.form['nationality']
+            student.religion = request.form['religion']
+            student.category = request.form['category']
             student.acadamic_year_id = request.form['acadamic_year']
             student.department_id = request.form['department_id']
             student.standard_id = request.form['standard_id']
@@ -660,23 +687,32 @@ def create_app():
         writer = csv.writer(output)
 
         writer.writerow([
+            'Academic Year', 'Department', 'Standard', 'Division',
             'Name','Enrollment number','Email', 'Phone', 'Address', 'Date of Birth',
-            'Date of admission','Academic Year', 'Department', 'Standard', 'Division'
+            'Gender', 'Father Name', 'Mother Name', 'Nationality', 'Religion', 'Category',
+            'Date of admission'
         ])
 
         for s in students:
             writer.writerow([
+                s.acadamic_year.year_name if s.acadamic_year else '',
+                s.department.department_name if s.department else '',
+                s.standard.name if s.standard else '',
+                s.division.name if s.division else '',
                 s.name,
                 s.enrollment_number,
                 s.email,
                 s.phone,
                 s.address,
                 s.date_of_birth.strftime('%Y-%m-%d') if s.date_of_birth else '',
+                s.gender if s.gender else '',
+                s.father_name if s.father_name else '',
+                s.mother_name if s.mother_name else '',
+                s.nationality if s.nationality else '',
+                s.religion if s.religion else '',
+                s.category if s.category else '',
                 s.date_of_addmission.strftime('%Y-%m-%d') if s.date_of_addmission else '',
-                s.acadamic_year.year_name if s.acadamic_year else '',
-                s.department.department_name if s.department else '',
-                s.standard.name if s.standard else '',
-                s.division.name if s.division else ''
+               
             ])
 
         output.seek(0)
