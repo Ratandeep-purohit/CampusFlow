@@ -6,7 +6,7 @@ import csv
 import pymysql
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import check_password_hash
-from model import Register, AcadamicYear, Departments, Standards , Roles , Division , Students
+from model import Register, AcadamicYear, Departments, Standards , Roles , Division , Students , Faculty_Department , Faculty
 from flask_mail import Message, Mail
 from flask_migrate import Migrate
 import pandas as pd
@@ -722,6 +722,50 @@ def create_app():
             as_attachment=True,
             download_name='filtered_students.csv'
         )   
+    @app.route('/faculty_department', methods=['GET', 'POST'])
+    def faculty_department():
+        if request.method == 'POST':
+            faculty_dept_name = request.form.get('faculty_department')
+            if faculty_dept_name:
+                existing = Faculty_Department.query.filter_by(name=faculty_dept_name).first()
+                if existing:
+                    flash("Faculty Department already exists!", "faculty_deleted_error")
+                else:
+                    new_faculty_dept = Faculty_Department(name=faculty_dept_name)
+                    try:
+                        db.session.add(new_faculty_dept)
+                        db.session.commit()
+                        flash("Faculty Department added successfully!", "success")
+                    except Exception as e:
+                        db.session.rollback()
+                        flash(f"Error adding Faculty Department: {str(e)}", "faculty_deleted_error")
+            return redirect(url_for('faculty_department'))
+    
+        departments_list = Faculty_Department.query.all()
+    return render_template('faculty_department.html', departments=departments_list)
+
+
+    @app.route('/faculty_departments/edit/<int:id>', methods=['POST'])
+    def edit_faculty_department(id):
+        new_dept = request.form.get('faculty_department')
+        dept = Faculty_Department.query.get_or_404(id)
+        dept.name = new_dept
+        db.session.commit()
+        flash("Faculty Department updated successfully!", "success")
+        return redirect(url_for('faculty_department'))
+
+
+    @app.route('/faculty_departments/delete/<int:id>', methods=['POST', 'GET'])
+    def delete_faculty_department(id):
+        dept = Faculty_Department.query.get_or_404(id)
+        if hasattr(dept, 'faculties') and dept.faculties:
+            flash("Cannot delete Faculty Department because faculties exist for this department.", "faculty_deleted_error")
+            return redirect(url_for('faculty_department'))
+        db.session.delete(dept)
+        db.session.commit()
+        flash("Faculty Department deleted successfully!", "success")
+        return redirect(url_for('faculty_department'))
+
     return app
     
 

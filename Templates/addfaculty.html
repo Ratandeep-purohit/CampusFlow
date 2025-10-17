@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Faculty</title>
     <link  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='addstudent.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='addfaculty.css') }}">
 </head>
 <body>
     <header>
@@ -20,6 +20,128 @@
             </ul>
         </nav>
     </header>
-    
+    <!-- Settings Nav -->
+     <nav class="settings-nav">
+        <ul>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">👤 Student</a>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('student_dashboard')}}">📋 Student Dashboard</a>
+                    <a href="{{ url_for('Add_student')}}">📊 Add Student</a>
+                    <a href="#">📚 View Student Profiles</a>
+                    <a href="#">📅 Student Attendance</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">💵 Fees Management</a>
+                <div class="dropdown-content">
+                    <a href="#">💰 View Fees</a>
+                    <a href="#">📄 Generate Receipt</a>
+                    <a href="#">📊 Fees Analytics</a>
+                    <a href="#">📅 Fees Collection</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">🏫 Exams & Results</a>
+                <div class="dropdown-content">
+                    <a href="#">📚 View Results</a>
+                    <a href="#">📅 Schedule Exams</a>
+                    <a href="#">📋 Question Paper Management</a>
+                    <a href="#">📈 Generate Result</a>
+                    <a href="#">📝 Add Exam</a>
+                    <a href="#">📊 Result Analytics</a>
+                    <a href="#">📈 Subject-wise Performance Reports</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">👨 Teacher & Faculty</a>
+                <div class="dropdown-content">
+                    <a href="#">🗂 Staff Profiles & Records</a>
+                    <a href="#">📚 Add Teacher & Faculty</a>
+                    <a href="#">📅 Teacher Timetable Management</a>
+                    <a href="#">⏰ Attendance & Leave Tracking</a>
+                    <a href="#">📊 Performance Evaluation</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">📆 Event Management</a>
+                <div class="dropdown-content">
+                    <a href="#">📅 Events Calendar</a>
+                    <a href="#">📢 News & Updates</a>
+                    <a href="#">📸 Photo Gallery</a>
+                    <a href="#">➕ Add New Event</a>
+                    <a href="#">📝 Register for Event</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">🔐 Security & Access</a>
+                <div class="dropdown-content">
+                    <a href="#">🔑 User Management</a>
+                    <a href="#">🔒 Role-based Access Control</a>
+                    <a href="#">🛡️ Data Encryption</a>
+                    <a href="#">📊 Audit Logs</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">⚙️ Settings</a>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('acadamic_year') }}">📅 acadamic Year</a>
+                    <a href="{{ url_for('department')}}">🏢 Departments</a>
+                    <a href="{{url_for('standards_page')}}">📚Manage Standard</a>
+                    <a href="{{url_for('Division_page')}}">✏️Manage Division </a>
+                    <a href="{{url_for('roles_page')}}">👥 Manage Roles</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <div class="container">
+    <h1>Add Faculty Member</h1>
+
+    <form action="#" method="POST">
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="fmid">Faculty ID:</label>
+        <input type="text" id="fmid" name="fmid" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" required>
+
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender" required>
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+        <label for="address">Address:</label>
+        <textarea id="address" name="address" rows="4" required></textarea>
+
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city">
+
+        <label for="state">State:</label>
+        <input type="text" id="state" name="state">
+
+        <label for="pincode">Pincode:</label>
+        <input type="text" id="pincode" name="pincode">
+
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required>
+
+        <label for="doj">Date of Joining:</label>
+        <input type="date" id="doj" name="doj" required>
+
+        <label for="qualification">qualification</label>
+        <input type="text" id="qualification" name="qualification">
+
+        <label for="experience">Experience (in years):</label>
+        <input type="number" id="experience" name="experience" min="0">
+
+    </form>
+</div>
 </body>
 </html>
