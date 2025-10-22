@@ -729,20 +729,20 @@ def create_app():
             if faculty_dept_name:
                 existing = Faculty_Department.query.filter_by(name=faculty_dept_name).first()
                 if existing:
-                    flash("Faculty Department already exists!", "faculty_deleted_error")
+                    flash("Faculty Department already exists!", "faculty_dept_error")
                 else:
                     new_faculty_dept = Faculty_Department(name=faculty_dept_name)
                     try:
                         db.session.add(new_faculty_dept)
                         db.session.commit()
-                        flash("Faculty Department added successfully!", "success")
+                        flash("Faculty Department added successfully!", "faculty_dept_success")
                     except Exception as e:
                         db.session.rollback()
-                        flash(f"Error adding Faculty Department: {str(e)}", "faculty_deleted_error")
+                        flash(f"Error adding Faculty Department: {str(e)}", "faculty_dept_error")
             return redirect(url_for('faculty_department'))
     
         departments_list = Faculty_Department.query.all()
-    return render_template('faculty_department.html', departments=departments_list)
+        return render_template('faculty_department.html', departments=departments_list)
 
 
     @app.route('/faculty_departments/edit/<int:id>', methods=['POST'])
@@ -751,7 +751,7 @@ def create_app():
         dept = Faculty_Department.query.get_or_404(id)
         dept.name = new_dept
         db.session.commit()
-        flash("Faculty Department updated successfully!", "success")
+        flash("Faculty Department updated successfully!", "faculty_dept_success")
         return redirect(url_for('faculty_department'))
 
 
@@ -759,11 +759,11 @@ def create_app():
     def delete_faculty_department(id):
         dept = Faculty_Department.query.get_or_404(id)
         if hasattr(dept, 'faculties') and dept.faculties:
-            flash("Cannot delete Faculty Department because faculties exist for this department.", "faculty_deleted_error")
+            flash("Cannot delete Faculty Department because faculties exist for this department.", "faculty_dept_error")
             return redirect(url_for('faculty_department'))
         db.session.delete(dept)
         db.session.commit()
-        flash("Faculty Department deleted successfully!", "success")
+        flash("Faculty Department deleted successfully!", "faculty_dept_success")
         return redirect(url_for('faculty_department'))
 
     return app
