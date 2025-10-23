@@ -59,7 +59,7 @@
                 <a href="#" class="dropbtn">👨 Teacher & Faculty</a>
                 <div class="dropdown-content">
                     <a href="#">👩‍🏫 Faculty Dashboard</a>
-                    <a href="{{ url_for('faculty_department')}}">📚 Add Faculty Department</a>
+                    <a href="{{ url_for('faculty_departments')}}">📚 Add Faculty Department</a>
                     <a href="#">📚 Add Faculty</a>
                     <a href="#">📊 View Faculty Profiles</a>
                     <a href="#">📅 Faculty Attendance</a>
@@ -115,7 +115,7 @@
         <!-- Left: Add Faculty Department -->
         <div class="add-year-box">
             <h2>Add Faculty Department</h2>
-            <form method="POST" action="{{ url_for('faculty_department') }}">
+            <form method="POST" action="{{ url_for('faculty_departments') }}">
                 <div class="form-group">
                     <label for="faculty_department">Faculty Department Name:</label>
                     <input type="text" id="faculty_department" name="faculty_department" required>

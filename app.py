@@ -722,8 +722,8 @@ def create_app():
             as_attachment=True,
             download_name='filtered_students.csv'
         )   
-    @app.route('/faculty_department', methods=['GET', 'POST'])
-    def faculty_department():
+    @app.route('/faculty_departments', methods=['GET', 'POST'])
+    def faculty_departments():
         if request.method == 'POST':
             faculty_dept_name = request.form.get('faculty_department')
             if faculty_dept_name:
@@ -739,7 +739,7 @@ def create_app():
                     except Exception as e:
                         db.session.rollback()
                         flash(f"Error adding Faculty Department: {str(e)}", "faculty_dept_error")
-            return redirect(url_for('faculty_department'))
+            return redirect(url_for('faculty_departments'))
     
         departments_list = Faculty_Department.query.all()
         return render_template('faculty_department.html', departments=departments_list)
@@ -752,7 +752,7 @@ def create_app():
         dept.name = new_dept
         db.session.commit()
         flash("Faculty Department updated successfully!", "faculty_dept_success")
-        return redirect(url_for('faculty_department'))
+        return redirect(url_for('faculty_departments'))
 
 
     @app.route('/faculty_departments/delete/<int:id>', methods=['POST', 'GET'])
@@ -760,11 +760,74 @@ def create_app():
         dept = Faculty_Department.query.get_or_404(id)
         if hasattr(dept, 'faculties') and dept.faculties:
             flash("Cannot delete Faculty Department because faculties exist for this department.", "faculty_dept_error")
-            return redirect(url_for('faculty_department'))
+            return redirect(url_for('faculty_departments'))
         db.session.delete(dept)
         db.session.commit()
         flash("Faculty Department deleted successfully!", "faculty_dept_success")
-        return redirect(url_for('faculty_department'))
+        return redirect(url_for('faculty_departments'))
+    @app.route('/Add_faculty', methods=['GET', 'POST'])
+    def Add_faculty():
+        if request.method == 'POST':
+            try:
+                name = request.form.get('name')
+                fmid = request.form.get('fmid')
+                email = request.form.get('email')
+                phone = request.form.get('phone')
+                gender = request.form.get('gender')
+                address = request.form.get('address')
+                city = request.form.get('city')
+                state = request.form.get('state')
+                pincode = request.form.get('pincode')
+                date_of_birth = request.form.get('dob')
+                joining_date = request.form.get('doj')
+                qualification = request.form.get('qualification')
+                experience = request.form.get('experience')
+                faculty_department_id= request.form.get('department_id')
+
+                # ✅ Check department first
+                if not faculty_department_id:
+                    flash("Error: Department dropdown must be selected!", "Facultydropdownerror")
+                    return redirect(url_for('Add_faculty'))
+
+                # ✅ Check duplicate email or phone
+                existing_faculty = Faculty.query.filter(
+                    (Faculty.email == email) | (Faculty.phone == phone)
+                ).first()
+                if existing_faculty:
+                    flash("Error: Faculty with this email or phone already exists!", "FacultyEmailerror")
+                    return redirect(url_for('Add_faculty'))
+
+                # ✅ Add new faculty
+                new_faculty = Faculty(
+                    name=name,
+                    fmid=fmid,
+                    email=email,
+                    phone=phone,
+                    gender=gender,
+                    address=address,
+                    city=city,
+                    state=state,
+                    pincode=pincode,
+                    date_of_birth=date_of_birth,
+                    joining_date=joining_date,
+                    qualification=qualification,
+                    experience=experience,
+                    faculty_department_id=faculty_department_id
+                )
+
+                db.session.add(new_faculty)
+                db.session.commit()
+                flash("Faculty added successfully!", "Facultyaddsuccess")
+                return redirect(url_for('Add_faculty'))
+
+            except Exception as e:
+                db.session.rollback()
+                flash(f"Error adding faculty: {str(e)}", "Facultyadderror")
+                return redirect(url_for('Add_faculty'))
+
+        # ✅ Send dropdown data to template
+        departments = Faculty_Department.query.all()
+        return render_template('addfaculty.html', departments=departments)
 
     return app
     
