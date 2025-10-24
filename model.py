@@ -70,14 +70,14 @@ class Faculty_Department(db.Model):
     
     def __repr__(self):
         return f"<Faculty_Department {self.name}>"
-# class Subjects(db.Model):
-#     __tablename__='subjects'
+class Subjects(db.Model):
+    __tablename__='subjects'
     
-#     id=db.Column(db.Integer,primary_key=True)
-#     name=db.Column(db.String(100),nullable=False)
+    id=db.Column(db.Integer,primary_key=True)
+    name=db.Column(db.String(100),nullable=False)
     
-#     def __repr__(self):
-#         return f'<Subjects {self.name}>'
+    def __repr__(self):
+        return f'<Subjects {self.name}>'
     
 class Faculty(db.Model):
     __tablename__='faculty'
