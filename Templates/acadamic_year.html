@@ -94,15 +94,20 @@
                     <a href="{{url_for('standards_page')}}">📚Manage Standard</a>
                     <a href="{{url_for('Division_page')}}">✏️Manage Division </a>
                     <a href="{{url_for('roles_page')}}">👥 Manage Roles</a>
+                    <a href="{{url_for('medium')}}">📝 Manage Medium</a>
                 </div>
             </li>
         </ul>
     </nav>
- {% with messages = get_flashed_messages(with_categories=true) %}
+{% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
   <div class="flash-container">
     {% for category, message in messages %}
-      <div class="flash-message {{ 'error' if category == 'deleteacademicyearerror' else 'success' }}">
+      <div class="flash-message 
+          {% if 'error' in category %}error
+          {% elif 'success' in category %}success
+          {% else %}info{% endif %}
+      ">
         {{ message }}
       </div>
     {% endfor %}

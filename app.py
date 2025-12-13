@@ -6,7 +6,7 @@ import csv
 import pymysql
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import check_password_hash
-from model import Register, AcadamicYear, Departments, Standards , Roles , Division , Students , Faculty_Department , Faculty
+from model import Register, AcadamicYear, Departments, Standards , Roles , Division , Students , Faculty_Department , Faculty , Medium
 from flask_mail import Message, Mail
 from flask_migrate import Migrate
 import pandas as pd
@@ -64,10 +64,10 @@ def create_app():
             
             if user_data and user_data[3] == password:
                 session['username'] = user_data[1]
-                flash("Login successful!", "success")
+                flash("Login successful!", "login_success")
                 return redirect(url_for('home'))
             else:
-                flash("Invalid username or password!", "danger")
+                flash("Invalid username or password!", "login_error")
                 return render_template('login.html')
         
         return render_template('login.html')
@@ -193,16 +193,16 @@ def create_app():
             if year:
                 existing = AcadamicYear.query.filter_by(year_name=year).first()
                 if existing:
-                    flash("Academic year already exists!", "error")
+                    flash("Academic year already exists!", "year_error")
                 else:
                     new_year = AcadamicYear(year_name=year)
                     try:
                         db.session.add(new_year)
                         db.session.commit()
-                        flash("Academic year added successfully!", "success")
+                        flash("Academic year added successfully!", "year_success")
                     except Exception as e:
                         db.session.rollback()
-                        flash(f"Error adding academic year: {str(e)}", "error")
+                        flash(f"Error adding academic year: {str(e)}", "year_error")
                 return redirect(url_for('acadamic_year'))
         years = AcadamicYear.query.all()
         return render_template("acadamic_year.html", years=years)
@@ -213,18 +213,18 @@ def create_app():
         ay = AcadamicYear.query.get_or_404(id)
         ay.year_name = new_year
         db.session.commit()
-        flash("Academic year updated successfully!", "success")
+        flash("Academic year updated successfully!", "year_success")
         return redirect(url_for('acadamic_year'))
 
     @app.route('/acadamic_years/delete/<int:id>', methods=['POST','GET'])
     def delete_acadamic_year(id):
         ay = AcadamicYear.query.get_or_404(id)
         if ay.students:
-            flash("Cannot delete academic year Because students exist for this year.", "deleteacademicyearerror")
+            flash("Cannot delete academic year Because students exist for this year.", "year_error")
             return redirect(url_for('acadamic_year'))
         db.session.delete(ay)
         db.session.commit()
-        flash("Academic year deleted successfully!", "success")
+        flash("Academic year deleted successfully!", "year_success")
         return redirect(url_for('acadamic_year'))
 
     # -------- Standards -------- #
@@ -319,10 +319,10 @@ def create_app():
                     try:
                         db.session.add(new_division)
                         db.session.commit()
-                        flash("Division added suce","sucess")
+                        flash("Division added successfully","successdivision")
                     except Exception as e:
                         db.session.rollback()
-                        flash(f"Error adding Division: {str(e)}","error")
+                        flash(f"Error adding Division: {str(e)}","errordivision")
             return redirect(url_for('Division_page'))
         all_division=Division.query.all()
         return render_template('division.html',Division=all_division)
@@ -333,17 +333,17 @@ def create_app():
             new_division=request.form.get('Division_name')
             division.name=new_division
             db.session.commit()
-            flash("Division updated successfully!","success")
+            flash("Division updated successfully!","successdivision")
             return redirect(url_for('Division_page'))
     @app.route('/Division/delete/<int:id>',methods=['POST','GET'])
     def Delete_Division(id):
         division=Division.query.get_or_404(id)
         if division.students:
-            flash("Cannot delete Division Because students exist for this Division.", "deletedivisionerror")
+            flash("Cannot delete Division Because students already exist for this Division.","deletedivisionerror")
             return redirect(url_for('Division_page'))
         db.session.delete(division)
         db.session.commit()
-        flash("Division deleted successfully!","success")
+        flash("Division deleted successfully!","successdivision")
         return redirect(url_for('Division_page'))
     @app.route('/Add_student', methods=['GET', 'POST'])
     def Add_student():
@@ -625,6 +625,7 @@ def create_app():
             db.session.commit()
             flash("Student updated successfully!", "success")
             return redirect(url_for('student_dashboard'))
+        
 
         return render_template('editstudent.html', student=student, years=years, departments=departments, standards=standards, divisions=divisions)
     @app.route('/bulk_delete_students', methods=['POST'])
@@ -828,7 +829,46 @@ def create_app():
         # ✅ Send dropdown data to template
         departments = Faculty_Department.query.all()
         return render_template('addfaculty.html', departments=departments)
-
+    @app.route('/medium' , methods=['GET','POST'])
+    def medium():
+        if request.method=="POST":
+            medium_name=request.form.get('medium_name')
+            if medium_name:
+                existing=Medium.query.filter_by(name=medium_name).first()
+                if existing:
+                    flash("Medium is already exist","mediumerror")
+                else:
+                    new_medium=Medium(name=medium_name)
+                    try:
+                        db.session.add(new_medium)
+                        db.session.commit()
+                        flash("Medium added sucessfully" , "sucessmedium")
+                    except Exception as e:
+                        db.session.rollback()
+                        flash(f"Error in adding medium:{str(e)}","errormedium")
+            return redirect(url_for('medium'))
+        all_medium=Medium.query.all()
+        return render_template('medium.html',Medium=all_medium)     
+    @app.route('/medium/edit/<int:id>',methods=['GET','POST'])
+    def Edit_medium(id):
+        medium=Medium.query.get_or_404(id)
+        if request.method=='POST':
+            new_medium=request.form.get('medium_name')
+            medium.name=new_medium
+            db.session.commit()
+            flash("Medium updated successfully!","successmedium")
+            return redirect(url_for('medium'))
+    @app.route('/medium/delete/<int:id>',methods=['POST','GET'])
+    def Delete_medium(id):
+        medium=Medium.query.get_or_404(id)
+        if medium.students:
+            flash("Cannot delete Medium Because students already exist for this Medium.","deletemediumerror")
+            return redirect(url_for('medium'))
+        db.session.delete(medium)
+        db.session.commit()
+        flash("Medium deleted successfully!","successmedium")
+        return redirect(url_for('medium'))
+                
     return app
     
 

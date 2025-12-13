@@ -78,6 +78,15 @@ class Subjects(db.Model):
     
     def __repr__(self):
         return f'<Subjects {self.name}>'
+class Medium(db.Model):
+    __tablename__="Medium"
+    
+    id=db.Column(db.Integer,primary_key=True)
+    name=db.Column(db.String(100),nullable=False)
+    
+    def __repr__(self):
+        return f'<Subjects {self.name}>'
+
     
 class Faculty(db.Model):
     __tablename__='faculty'
@@ -124,12 +133,14 @@ class Students(UserMixin, db.Model):
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     standard_id = db.Column(db.Integer, db.ForeignKey('standards.id'), nullable=False)
     division_id = db.Column(db.Integer, db.ForeignKey('division.id'), nullable=False)
+    medium_id = db.Column(db.Integer, db.ForeignKey('Medium.id'), nullable=False)
 
 
     acadamic_year = db.relationship('AcadamicYear', backref='students')
     department = db.relationship('Departments', backref='students')
     standard = db.relationship('Standards', backref='students')
     division=db.relationship('Division', backref='students')
+    Medium=db.relationship('Medium',backref='students')
 
     def __repr__(self):
         return f'<Student {self.name}>'

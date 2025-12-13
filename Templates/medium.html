@@ -3,37 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roles</title>
+    <title>Medium - CampusFlow</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static' , filename='Roles.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='medium.css') }}">
 </head>
 <body>
-    <!--Header-->
-    <header>
+     <header>
         <div class="logo">📘 CampusFlow</div>
         <nav>
             <ul>
                 <li><a href="{{ url_for('home') }}">Home</a></li>
                 <li><a href="{{ url_for('feature') }}">Features</a></li>
-                <li><a href="{{ url_for('about')}}">About</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
                 <li><a href="{{ url_for('contact') }}">Contact</a></li>
                 <li><a href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
         </nav>
     </header>
-    <!--Setting Nav-->
+    <!--Settings navbar-->
     <nav class="settings-nav">
-        <ul>
-            <li class="dropdown">
-                <a href="#" class="dropbtn">👤 Student</a>
-                <div class="dropdown-content">
+    <ul>
+        <li class="dropdown">
+            <a href="#" class="dropbtn">👤Students</a>
+            <div class="dropdown-content">
                     <a href="{{ url_for('student_dashboard')}}">📋 Student Dashboard</a>
                     <a href="{{ url_for('Add_student')}}">📊 Add Student</a>
                     <a href="#">📚 View Student Profiles</a>
                     <a href="#">📅 Student Attendance</a>
                 </div>
-            </li>
-            <li class="dropdown">
+        </li>
+        <li class="dropdown">
                 <a href="#" class="dropbtn">💵 Fees Management</a>
                 <div class="dropdown-content">
                     <a href="#">💰 View Fees</a>
@@ -57,12 +56,11 @@
             <li class="dropdown">
                 <a href="#" class="dropbtn">👨 Teacher & Faculty</a>
                 <div class="dropdown-content">
-                    <a href="#">🗂 Staff Profiles & Records</a>
+                    <a href="#">👩‍🏫 Faculty Dashboard</a>
                     <a href="{{ url_for('faculty_departments')}}">📚 Add Faculty Department</a>
-                    <a href="{{ url_for('Add_faculty')}}">📚 Add Teacher & Faculty</a>
-                    <a href="#">📅 Teacher Timetable Management</a>
-                    <a href="#">⏰ Attendance & Leave Tracking</a>
-                    <a href="#">📊 Performance Evaluation</a>
+                    <a href="{{ url_for('Add_faculty')}}">📚 Add Faculty</a>
+                    <a href="#">📊 View Faculty Profiles</a>
+                    <a href="#">📅 Faculty Attendance</a>
                 </div>
             </li>
             <li class="dropdown">
@@ -78,17 +76,17 @@
             <li class="dropdown">
                 <a href="#" class="dropbtn">🔐 Security & Access</a>
                 <div class="dropdown-content">
-                    <a href="#">🔑 User Management</a>
-                    <a href="#">🔒 Role-based Access Control</a>
-                    <a href="#">🛡️ Data Encryption</a>
+                    <a href="#">🔒 User Management</a>
+                    <a href="#">🔑 Role-Based Access Control</a>
+                    <a href="#">🛡️ Security Settings</a>
                     <a href="#">📊 Audit Logs</a>
                 </div>
             </li>
             <li class="dropdown">
                 <a href="#" class="dropbtn">⚙️ Settings</a>
                 <div class="dropdown-content">
-                    <a href="{{ url_for('acadamic_year') }}">📅 acadamic Year</a>
-                    <a href="{{ url_for('department')}}">🏢 Departments</a>
+                    <a href="{{ url_for('acadamic_year') }}">📅 Academic Year</a>
+                    <a href="{{ url_for('department') }}">🏢 Departments</a>
                     <a href="{{url_for('standards_page')}}">📚Manage Standard</a>
                     <a href="{{url_for('Division_page')}}">✏️Manage Division </a>
                     <a href="{{url_for('roles_page')}}">👥 Manage Roles</a>
@@ -97,42 +95,35 @@
             </li>
         </ul>
     </nav>
-
-    <!--Main two-column container-->
     <div class="main-container">
-        <!--Left side:Add Roles-->
         <div class="add-year-box">
-            <h1>Create Roles</h1>
-            <form method="POST" action="#">
+            <h2>Manage Medium</h2>
+            <form method="POST" action="{{ url_for('medium')}}">
                 <div class="form-group">
-                    <label for="#">Roles</label>
-                    <input type="text" id="Roles" name="Roles" required>
+                    <label for="medium_name">Medium name:</label>
+                    <input type="text" name="medium_name" placeholder="Enter Medium Name" required>
                 </div>
-                <button type="submit">➕ Create</button>
+                <button type="submit"> ➕ Add Medium</button>
             </form>
         </div>
-
-        <!--Right side: Roles list-->
         <ul class="year-list">
-            {% for role in Roles %}
+            {% for medium in Medium %}
             <li>
-                <span>{{role.name}}</span>
-                <!--Edit form-->
-                <form method="POST" action="{{ url_for('Edit_Roles' ,id=role.id )}}" class="edit-form" style="display: inline;">
-                    <input type="text" name="Roles_name" placeholder="Edit Roles" required>
-                    <button type="submit" class="edit-toggle">Edit</button>
+                <span>{{medium.name}}</span>
+                <form method="POST" action="{{ url_for('Edit_medium',id=medium.id)}}" class="edit-form" style="display: inline;">
+                    <input type="text" name="medium_name" placeholder="Edit Medium" required>
+                    <button type="submit" class="edit-toggle">✏️ Edit</button>
                 </form>
-                <a href="{{ url_for('Delete_Roles',id=role.id)}}" class="delete-btn"
-                onclick="return confirm('Are you sure you want to delete this Role?');">
-                Delete
-            </a>
+                <a href="{{ url_for('Delete_medium',id=medium.id)}}" class="delete-btn"
+                onclick="return confirm('Are you sure you want to delete this Medium?')">Delete</a>
             </li>
             {% else %}
-            <li>No Roles added yet</li>
+                <li class = "empty-item">Medium available</li>
             {% endfor %}
         </ul>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll(".edit-toggle").forEach(function(button) {
         button.addEventListener("click", function() {
             // const listItem = this.closest("li");
@@ -151,6 +142,26 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.querySelector(".flash-container");
+  if (!container) return;
+
+  const messages = container.querySelectorAll(".flash-message");
+
+  messages.forEach((msg, index) => {
+    // Slight stagger for multiple messages
+    setTimeout(() => msg.classList.add("show"), index * 100);
+
+    // Fade out after 3 seconds
+    setTimeout(() => {
+      msg.classList.add("fade-out");
+      setTimeout(() => {
+        msg.remove();
+        if (container.children.length === 0) container.remove();
+      }, 400); // match CSS transition
+    }, 4000);
+  });
+});
 </script>
-    </body>
+</body>
 </html>
