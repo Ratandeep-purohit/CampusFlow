@@ -15,7 +15,7 @@ body {
 /* Header */
 header {
     background: #14141f;
-    padding: 15px 30px;
+    padding: 15px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -33,7 +33,7 @@ header nav ul {
 }
 
 header nav ul li {
-    margin-left: 20px;
+    margin-left: 25px;
 }
 
 header nav ul li a {
@@ -50,55 +50,56 @@ header nav ul li a:hover {
 /* Settings Nav */
 .settings-nav {
     background: #1b1b28;
-    padding: 10px 20px;
+    border-bottom: 1px solid #333;
 }
 
 .settings-nav ul {
-    list-style: none;
     display: flex;
+    list-style: none;
+    padding: 0 20px;
 }
 
 .settings-nav ul li {
     position: relative;
-    margin-right: 30px;
 }
 
-.settings-nav .dropbtn {
-    color: #fff;
-    font-weight: 500;
+.settings-nav ul li a.dropbtn {
+    display: block;
+    padding: 14px 20px;
+    color: #f1f1f1;
     text-decoration: none;
-    cursor: pointer;
-    display: inline-block;
-    padding: 8px 12px;
-    border-radius: 6px;
+    font-size: 14px;
     transition: background 0.3s;
 }
 
-.settings-nav .dropbtn:hover {
-    background: #007bff;
+.settings-nav ul li a.dropbtn:hover {
+    background: #2b2b3a;
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
-    background: #14141f;
+    top: 48px;
+    left: 0;
+    background: #1f1f2e;
     min-width: 220px;
-    top: 40px;
-    border-radius: 8px;
-    overflow: hidden;
     z-index: 1000;
+    border: 1px solid #333;
+    border-radius: 5px;
+    overflow: hidden;
 }
 
 .dropdown-content a {
     display: block;
-    padding: 10px;
-    color: #fff;
+    padding: 10px 15px;
+    font-size: 13px;
+    color: #f1f1f1;
     text-decoration: none;
     transition: background 0.3s;
 }
 
 .dropdown-content a:hover {
-    background: #007bff;
+    background: #2b2b3a;
 }
 
 .dropdown:hover .dropdown-content {

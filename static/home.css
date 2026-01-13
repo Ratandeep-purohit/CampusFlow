@@ -11,13 +11,37 @@ body {
 }
 
 header {
+    background: #14141f;
+    padding: 15px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 60px;
-    background: #2c3e50;
-    color: white;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+header .logo {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+header nav ul {
+    display: flex;
+    list-style: none;
+}
+
+header nav ul li {
+    margin-left: 20px;
+}
+
+header nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+header nav ul li a:hover {
+    color: #007bff;
 }
 
 .logo {
@@ -163,67 +187,59 @@ footer {
 }
 /* Settings Nav with Dropdown */
 .settings-nav {
-    background: #34495e;
-    padding: 12px 60px;
-    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+    background: #1b1b28;
+    border-bottom: 1px solid #333;
 }
 
 .settings-nav ul {
-    list-style: none;
     display: flex;
-    gap: 40px;
-    margin: 0;
-    padding: 0;
-    align-items: center;
+    list-style: none;
+    padding: 0 20px;
 }
 
-.settings-nav a {
-    color: #ecf0f1;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s;
-}
-
-.settings-nav a:hover {
-    color: #00e6e6;
-}
-
-/* Dropdown */
-.dropdown {
+.settings-nav ul li {
     position: relative;
-    display: inline-block;
 }
 
-.dropbtn {
-    background: none;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
+.settings-nav ul li a.dropbtn {
+    display: block;
+    padding: 14px 20px;
+    color: #f1f1f1;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.settings-nav ul li a.dropbtn:hover {
+    background: #2b2b3a;
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #2c3e50;
-    min-width: 180px;
-    z-index: 1;
-    border-radius: 6px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    top: 48px;
+    left: 0;
+    background: #1f1f2e;
+    min-width: 220px;
+    z-index: 1000;
+    border: 1px solid #333;
+    border-radius: 5px;
+    overflow: hidden;
 }
 
 .dropdown-content a {
-    color: white;
-    padding: 12px 16px;
-    text-decoration: none;
     display: block;
-    transition: 0.3s;
+    padding: 10px 15px;
+    font-size: 13px;
+    color: #f1f1f1;
+    text-decoration: none;
+    transition: background 0.3s;
 }
 
 .dropdown-content a:hover {
-    background-color: #00b3b3;
+    background: #2b2b3a;
 }
 
-/* Show dropdown on hover */
 .dropdown:hover .dropdown-content {
     display: block;
 }
