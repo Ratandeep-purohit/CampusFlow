@@ -829,6 +829,89 @@ def create_app():
         # ✅ Send dropdown data to template
         departments = Faculty_Department.query.all()
         return render_template('addfaculty.html', departments=departments)
+    @app.route('/Add_bulk_faculty')
+    def Add_bulk_faculty():
+        return render_template('addbulkfaculty.html')
+    @app.route('/download_sample_excel_faculty')
+    def download_sample_excel_faculty():
+        # Create a sample Excel file
+        faculty_columns = ["Full name", "Faculty ID", "Email", "Phone number", "Gender", "Address", "City", "State", "pincode", 
+                           "Date_of_date", "Date_of_joining", "qualification", "Experience", "Department"]
+        df_faculty = pd.DataFrame(columns=faculty_columns)
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
+            df_faculty.to_excel(writer, index=False, sheet_name="Faculty")
+        output.seek(0)
+        return send_file(output,
+                         as_attachment=True,
+                         download_name="sample_faculty.xlsx",
+                         mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    @app.route('/upload_faculty', methods=['POST'])
+    def upload_faculty():
+        file = request.files.get('file')
+        if not file:
+            flash("No file uploaded", "addfacultyerror")
+            return redirect(url_for('Add_bulk_faculty'))
+
+        try:
+            df = pd.read_excel(file)
+            df.columns = df.columns.str.strip().str.lower()
+        except Exception as e:
+            flash(f"Error reading Excel file: {str(e)}", "addfacultyerror")
+            return redirect(url_for('Add_bulk_faculty'))
+
+        required_columns = ["full name", "faculty id", "email", "phone number", "gender", "address", "city", "state", "pincode", 
+                            "date_of_date", "date_of_joining", "qualification", "experience", "department"]
+        missing_cols = [col for col in required_columns if col not in df.columns]
+        if missing_cols:
+            flash(f"Missing columns: {', '.join(missing_cols)}", "addfacultyerror")
+            return redirect(url_for('Add_bulk_faculty'))
+        inserted = 0
+        errors = []
+        new_faculty_list = []
+        for index, row in df.iterrows():
+            try:
+                dept = Faculty_Department.query.filter_by(name=row["department"]).first()
+                if not dept:
+                    errors.append(f"Row {index+2}: Invalid Department '{row['department']}'")
+                    continue
+                if Faculty.query.filter_by(phone=row["phone number"]).first():
+                    errors.append(f"Row {index+2}: Duplicate Phone Number '{row['phone number']}'")
+                    continue
+                if Faculty.query.filter_by(email=row["email"]).first():
+                    errors.append(f"Row {index+2}: Duplicate Email '{row['email']}'")
+                    continue
+                if Faculty.query.filter_by(fmid=row["faculty id"]).first():
+                    errors.append(f"Row {index+2}: Duplicate Faculty ID '{row['faculty id']}'")
+                    continue
+                new_faculty = Faculty(
+                    name=row["full name"],
+                    fmid=row["faculty id"],
+                    email=row["email"],
+                    phone=row["phone number"],
+                    gender=row["gender"],
+                    address=row["address"],
+                    city=row["city"],
+                    state=row["state"],
+                    pincode=row["pincode"],
+                    date_of_birth=row["date_of_date"],
+                    joining_date=row["date_of_joining"],
+                    qualification=row["qualification"],
+                    experience=row["experience"],
+                    faculty_department_id=dept.id
+                )
+                new_faculty_list.append(new_faculty)
+                inserted += 1
+            except Exception as e:
+                errors.append(f"Row {index+2}: {str(e)}")
+        if new_faculty_list:
+            db.session.bulk_save_objects(new_faculty_list)
+            db.session.commit()
+        if inserted:
+            flash(f"{inserted} faculty members added successfully.", "addfacultysuccess")
+        if errors:
+            flash("Errors:\n" + "\n".join(errors), "addfacultyerror")
+        return redirect(url_for('Add_bulk_faculty'))
     @app.route('/medium' , methods=['GET','POST'])
     def medium():
         if request.method=="POST":
