@@ -912,6 +912,114 @@ def create_app():
         if errors:
             flash("Errors:\n" + "\n".join(errors), "addfacultyerror")
         return redirect(url_for('Add_bulk_faculty'))
+    @app.route('/faculty_dashboard', methods=['GET', 'POST'])
+    def faculty_dashboard():
+        departments = Faculty_Department.query.all()
+        faculty_list = []   # same name as template
+
+        selected_filters = {
+            'faculty_department_id': None
+        }
+
+        if request.method == 'POST':
+            selected_filters['faculty_department_id'] = request.form.get('faculty_department_id')
+
+            if selected_filters['faculty_department_id']:
+                dept_id = int(selected_filters['faculty_department_id'])  # 🔥 FIX
+
+                faculty_list = Faculty.query.filter_by(
+                    faculty_department_id=dept_id
+                ).all()
+
+                if not faculty_list:
+                    flash("No faculties found for the selected criteria.", "nofaculty")
+
+        return render_template(
+            'faculty_dashboard.html',
+            departments=departments,
+            faculty_list=faculty_list,
+            selected_filters=selected_filters
+        )
+    @app.route('/delete_faculty/<int:faculty_id>', methods=['POST'])
+    def delete_faculty(faculty_id):
+        faculty = Faculty.query.get_or_404(faculty_id)
+        try:
+            db.session.delete(faculty)
+            db.session.commit()
+            flash("Faculty deleted successfully!", "Facultydeletesuccess")
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Error deleting faculty: {str(e)}", "Facultydeleteerror")
+        return redirect(url_for('faculty_dashboard',faculty_department_id=request.form.get('faculty_department_id')))
+    @app.route('/export_faculty', methods=['POST'])
+    def export_faculty():
+        from io import StringIO
+        import io
+        import csv
+
+        # 1️⃣ Get selected faculty IDs (agar checkbox se aaye ho)
+        faculty_ids = request.form.get('faculty_ids', '')
+        faculty_ids = [int(fid) for fid in faculty_ids.split(',') if fid.strip().isdigit()]
+        
+        # 2️⃣ Get filters
+        faculty_department_id = request.form.get('faculty_department_id', type=int)
+        # 3️⃣ Query base
+        query = Faculty.query
+        # agar selected faculties diye hain → wahi export karo
+        if faculty_ids:
+            query = query.filter(Faculty.id.in_(faculty_ids))
+        # agar selected nahi, lekin filter diya gaya hai → filter apply karo
+        elif faculty_department_id:
+            query = query.filter_by(faculty_department_id=faculty_department_id)
+        # agar na select na filter → sabhi faculties
+        else:
+            query = Faculty.query
+        faculties = query.all()
+        # agar koi faculty hi nahi mila
+        if not faculties:
+            flash("No faculties found for export.", "error")
+            return redirect(url_for('faculty_dashboard'))
+        # 4️⃣ CSV generate karo
+        output = StringIO()
+        writer = csv.writer(output)
+        writer.writerow([
+            'faculty_department','Faculty ID', 'Name', 'Email', 'Phone', 'Gender', 'Address', 'City', 'State', 'Pincode',
+            'date_of_birth','joining_date','qualification','experience'])
+        for f in faculties:
+            writer.writerow([
+                f.Faculty_Department.name if f.Faculty_Department else '',
+                f.fmid,
+                f.name,
+                f.email,
+                f.phone,
+                f.gender,
+                f.address,
+                f.city,
+                f.state,
+                f.pincode,
+                f.date_of_birth.strftime('%Y-%m-%d') if f.date_of_birth else '',
+                f.joining_date.strftime('%Y-%m-%d') if f.joining_date else '',
+                f.qualification if f.qualification else '',
+                f.experience if f.experience else ''
+            ])
+        output.seek(0)
+        return send_file(
+            io.BytesIO(output.getvalue().encode()),
+            mimetype='text/csv',
+            as_attachment=True,
+            download_name='filtered_faculty.csv'
+        )
+    @app.route('/bulk_delete_faculty', methods=['POST'])
+    def bulk_delete_faculty():
+        faculty_ids = request.form.get('faculty_ids')
+        if faculty_ids:
+            ids_list = faculty_ids.split(',')
+            Faculty.query.filter(Faculty.id.in_(ids_list)).delete(synchronize_session=False)
+            db.session.commit()
+            flash(f'{len(ids_list)} faculty members deleted successfully!', 'facultysuccess')
+        else:
+            flash('No faculty members selected.', 'facultyerror')
+        return redirect(url_for('faculty_dashboard'))
     @app.route('/medium' , methods=['GET','POST'])
     def medium():
         if request.method=="POST":

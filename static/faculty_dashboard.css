@@ -1,0 +1,404 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: #0e0e14;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    background: #14141f;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .logo {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+header nav ul {
+    display: flex;
+    list-style: none;
+}
+
+header nav ul li {
+    margin-left: 20px;
+}
+
+header nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+header nav ul li a:hover {
+    color: #007bff;
+}
+
+/* Settings Nav */
+.settings-nav {
+    background: #1b1b28;
+    border-bottom: 1px solid #333;
+}
+
+.settings-nav ul {
+    display: flex;
+    list-style: none;
+    padding: 0 20px;
+}
+
+.settings-nav ul li {
+    position: relative;
+}
+
+.settings-nav ul li a.dropbtn {
+    display: block;
+    padding: 14px 20px;
+    color: #f1f1f1;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.settings-nav ul li a.dropbtn:hover {
+    background: #2b2b3a;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 48px;
+    left: 0;
+    background: #1f1f2e;
+    min-width: 220px;
+    z-index: 1000;
+    border: 1px solid #333;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 10px 15px;
+    font-size: 13px;
+    color: #f1f1f1;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.dropdown-content a:hover {
+    background: #2b2b3a;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Main Layout */
+.main-content {
+    display: flex;
+    gap: 30px;
+    padding: 40px 30px 30px 30px; /* space from top nav */
+}
+
+/* Filter Box */
+.filter-box {
+    background: #14141f;
+    padding: 20px;
+    border-radius: 12px;
+    width: 25%; /* 1/4 page */
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.4);
+    height: fit-content;
+}
+
+
+.filter-box h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.filter-box form label {
+    margin-top: 10px;
+    margin-bottom: 6px;
+    display: block;
+    font-weight: 500;
+}
+
+.filter-box form select,
+.filter-box form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    background: #1f1f2e;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    transition: border 0.3s;
+}
+
+.filter-box form select:focus,
+.filter-box form input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.filter-box button {
+    width: 100%;
+    padding: 12px;
+    background: #007bff;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.edit-btn {
+    padding: 6px 10px;
+    background: #28a745;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+.delete-btn {
+    padding: 6px 10px;
+    background: blue;
+    color: #fff;
+    border-radius: 6px;
+    border: none;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.filter-box button:hover {
+    background: #0056b3;
+}
+
+/* Table Box */
+.table-box {
+    width: 75%;
+    overflow-x: auto;
+    padding: 10px;
+}
+
+/* Make table fully responsive */
+table {
+    width: 100%;
+    min-width: 800px; /* prevent squishing when many columns */
+    border-collapse: collapse;
+    background-color: #1f1f2e;
+    border-radius: 8px;
+    overflow: hidden;
+    table-layout: fixed; /* distribute width evenly */
+}
+
+table th, table td {
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 1px solid #333;
+    white-space: nowrap; /* prevent breaking text */
+    overflow: hidden;
+    text-overflow: ellipsis; /* show “...” if text too long */
+}
+
+thead {
+    background-color: #2a2a3d;
+}
+
+table th {
+    background-color: #1f1f2e;
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+table th:first-child {
+    border-top-left-radius: 8px;
+    width: 40px; /* checkbox column */
+}
+
+table th:last-child {
+    border-top-right-radius: 8px;
+    width: 40px; /* actions column */
+    white-space: nowrap; /* prevent wrapping */
+}
+
+table tr:hover {
+    background-color: #2e2e48;
+    transition: background-color 0.2s ease;
+}
+
+table td {
+    color: #fff;
+    font-size: 14px;
+}
+
+/* Fix Actions column and Enroll Number width */
+table th:nth-child(2),
+table td:nth-child(2) {
+    width: 110px; /* Enroll Number */
+    text-align: center;
+}
+
+table th:last-child,
+table td:last-child {
+    width: 120px; /* Actions buttons */
+    text-align: center;
+}
+table th:last-child,
+table td:last-child {
+    width: 200px;            /* thoda zyada width do */
+    text-align: center;
+    white-space: nowrap;     /* buttons ek line me rahein */
+    overflow: visible;       /* cut-off na ho */
+}
+
+/* Flash messages */
+.flash {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+.flash.addsuccess {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.flash.Emailerror, .flash.adderror {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.table-box {
+    width: 75%;
+    overflow: visible; /* important for dropdown */
+    position: relative;
+}
+
+.table-actions-group {
+    display: flex;
+    align-items: center;
+    gap: 18px; /* sets space between export and menu */
+    position: relative;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #fff; /* white dot visible on dark bg */
+}
+
+.action-dropdown {
+    display: none;
+    position: absolute;
+    top: 30px; /* button ke niche */
+    right: 0;
+    background: #1f1f2e; /* dark bg */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    border-radius: 5px;
+    z-index: 10;
+    min-width: 150px;
+}
+
+.action-dropdown button {
+    display: block;
+    width: 150px;
+    padding: 8px 12px;
+    border: none;
+    background: none;
+    color: #fff;
+    text-align: left;
+    cursor: pointer;
+}
+
+.action-dropdown button:hover {
+    background: #007bff;
+    color: #fff;
+}
+.export-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+.export-button:hover {
+    background-color: #0056b3;
+}
+.table-actions {
+    position: relative;
+}
+.action-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #fff;
+}
+.action-dropdown {
+    display: none;
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background: #1f1f2e;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    border-radius: 5px;
+    z-index: 10;
+    min-width: 150px;
+}
+.table-actions .action-dropdown button {
+    display: block;
+    width: 150px;
+    padding: 8px 12px;
+    border: none;
+    background: none;
+    color: #fff;
+    text-align: left;
+    cursor: pointer;
+}
+.table-actions .action-dropdown button:hover {
+    background: #007bff;
+}
+.table-search {
+    margin-bottom: 10px;
+}
+
+#faculty-search {
+    width: 100%;
+    padding: 6px 10px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}

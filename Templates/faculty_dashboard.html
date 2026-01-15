@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>CampusFlow - Faculty Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='faculty_dashboard.css') }}">
+    <link rel="stylesheet" href="{{url_for('static', filename='student_dashboard.css')}}">
+</head>
+<body>
+
+    <!-- Existing Header -->
+    <header>
+        <div class="logo">📘 CampusFlow</div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('feature') }}">Features</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+       <nav class="settings-nav">
+  <ul>
+    <li class="dropdown">
+      <a href="#" class="dropbtn">👤 Student</a>
+      <div class="dropdown-content">
+        <a href="{{ url_for('student_dashboard')}}">📋 Student Dashboard</a>
+        <a href="{{ url_for('Add_student')}}">📊 Add Student</a>
+        <a href="#">📚 View Student Profiles</a>
+        <a href="#">📅 Student Attendance</a>
+      </div>
+    </li>
+    <li class="dropdown">
+        <a href="#" class="dropbtn"> 💵Fees Management</a>
+        <div class="dropdown-content">
+            <a href="#">💰 View Fees</a>
+            <a href="#">📄 Generate Receipt</a>
+            <a href="#">📊 Fees Analytics</a>
+            <a href="#">📅 Fees Collection</a>
+        </div>
+    </li>
+    <li class="dropdown">
+        <a href="#" class="dropbtn"> 🏫 Exams & Results</a>
+        <div class="dropdown-content">
+            <a href="#">📚 View Results</a>
+            <a href="#">📅 Schedule Exams</a>
+            <a href="#">📋 Question Paper Management</a>
+            <a href="#">📈 Generate Result</a>
+            <a href="#">📝 Add Exam</a>
+            <a href="#">📊 Result Analytics</a>
+            <a href="#">📈 Subject-wise Performance Reports</a>
+        </div>
+    </li>
+    <li class="dropdown">
+        <a href="#" class="dropbtn">👨 Teacher & faculty</a>
+        <div class="dropdown-content">
+            <a href="#">🗂 Staff Profiles & Records</a>
+            <a href="{{ url_for('faculty_departments')}}">📚 Add Faculty Department</a>
+            <a href="{{ url_for('Add_faculty')}}">📚 Add Teacher & faculty</a>
+            <a href="#">📅 Teacher Timetable Management</a>
+            <a href="#">⏰ Attendance & Leave Tracking</a>
+            <a href="#">📊 Performance Evaluation</a>
+        </div>
+    </li>
+    <li class="dropdown">
+    <a href="#" class="dropbtn">📆 Event Management</a>
+    <div class="dropdown-content">
+        <a href="#">📅 Events Calendar</a>
+        <a href="#">📢 News & Updates</a>
+        <a href="#">📸 Photo Gallery</a>
+        <a href="#">➕ Add New Event</a>
+        <a href="#">📝 Register for Event</a>
+    </div>
+</li>
+    <li class="dropdown">
+        <a href="#" class="dropbtn">🔐 Security & access</a>
+        <div class="dropdown-content">
+            <a href="#">🔑 User Management</a>
+            <a href="#">🔒 Role-based Access Control</a>
+            <a href="#">🛡️ Data Encryption</a>
+            <a href="#">📊 Audit Logs</a>
+        </div>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropbtn">⚙️ Settings</a>
+      <div class="dropdown-content">
+        <a href="{{url_for('acadamic_year')}}">📅 Academic Year</a>
+        <a href="{{url_for('department')}}">🏢 Departments</a>
+        <a href="{{url_for('standards_page')}}">📚Manage Standard</a>
+        <a href="{{url_for('Division_page')}}">✏️Manage Division </a>
+        <a href="{{url_for('roles_page')}}">👥 Manage Roles</a>
+        <a href="{{url_for('medium')}}">📝 Manage Medium</a>
+      </div>
+    </li>
+    </ul>
+</nav>
+<div class="main-content">
+    <div class="filter-box">
+    <h2>Filter Faculty</h2>
+    <form method="POST" action="{{ url_for('faculty_dashboard') }}">
+    <label for="faculty_department_id">Department:</label>
+    <select name="faculty_department_id" id="faculty_department_id">
+        <option value="">Select Department</option>
+        {% for dept in departments %}
+            <option value="{{ dept.id }}"
+                {% if selected_filters.faculty_department_id == dept.id|string %}
+                    selected
+                {% endif %}
+            >
+                {{ dept.name }}
+            </option>
+        {% endfor %}
+    </select>
+    <button type="submit">Filter</button>
+</form>
+    </div>
+    <div class="table-box">
+        <div class="table-header">
+            <h2>Faculty Dashboard</h2>
+            <div class="table-actions-group">
+                <form id="exportForm" method="POST" action="{{ url_for('export_faculty') }}" style="display: none;">
+                    <input type="hidden" name="faculty_ids" id="export_faculty_ids">
+                </form>
+                <button type="button" class="export-button" onclick="prepareExport()">Export Selected</button>
+                <div class="table-actions">
+                    <button class="action-btn">⋮</button>
+                    <div class="action-dropdown">
+                        <form id="bulk-delete-form" method="POST" action="{{ url_for('bulk_delete_faculty') }}">
+                            <input type="hidden" name="faculty_ids" id="delete_faculty_ids">
+                            <button type="submit" onclick="prepareBulkDelete()">🗑️ Delete Selected</button>
+                        </form>
+                    <button type="button">Edit Selected</button>
+                    </div>
+                </div>    
+            </div>
+        </div>
+        <div class="table-search">
+            <input type="text" id="faculty-search" placeholder="🔍 Search faculty by name,email,phone..."/>     
+        </div>
+        {% if faculty_list %}
+        <table>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select-all"></th>
+                    <th>Faculty ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Department</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="faculty-table-body">
+                {% for faculty in faculty_list %}
+                <tr>
+                    <td><input type="checkbox" class="select-faculty" value="{{ faculty.id }}"></td>
+                    <td>{{ faculty.fmid }}</td>
+                    <td>{{ faculty.name }}</td>
+                    <td>{{ faculty.email }}</td>
+                    <td>{{ faculty.phone }}</td>
+                    <td>{{ faculty.Faculty_Department.name }}</td>
+                    <td>
+                        <a href="#" class="edit-btn">Edit</a> |
+                        <form action="{{url_for('delete_faculty',faculty_id=faculty.id)}}" method="POST" style="display:inline;">
+                            <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this faculty member?');"><i class="fas fa-trash"></i>Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p>No faculty found.</p>
+        {% endif %}
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+    // Select all checkbox
+    const selectAll = document.getElementById('select-all');
+    const checkboxes = document.querySelectorAll('.select-faculty');
+
+    selectAll.addEventListener('change', function() {
+        checkboxes.forEach(cb => cb.checked = this.checked);
+    });
+    const searchInput = document.getElementById('faculty-search');
+searchInput.addEventListener('input', function() {
+    const query = this.value.toLowerCase();
+    document.querySelectorAll('table tbody tr').forEach(row => {
+        const rowText = row.innerText.toLowerCase();
+        row.style.display = rowText.includes(query) ? '' : 'none';
+    });
+});
+
+    // Click row to toggle checkbox (except when clicking checkbox itself)
+    document.querySelectorAll('tbody tr').forEach(row => {
+        row.addEventListener('click', function(e) {
+            if (e.target.type !== 'checkbox') {
+                const cb = this.querySelector('.select-faculty');
+                cb.checked = !cb.checked;
+            }
+        });
+    });
+
+    // Action dropdown toggle
+    const actionBtns = document.querySelectorAll('.action-btn');
+    actionBtns.forEach(btn => {
+        const dropdown = btn.nextElementSibling;
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+        });
+    });
+
+    // Click outside to close all dropdowns
+    document.addEventListener('click', function() {
+        document.querySelectorAll('.action-dropdown').forEach(dd => dd.style.display = 'none');
+    });
+
+    // Bulk delete function
+    window.prepareBulkDelete = function() {
+        const selected = Array.from(document.querySelectorAll('.select-faculty'))
+                              .filter(cb => cb.checked)
+                              .map(cb => cb.value);
+
+        if (selected.length === 0) {
+            alert('Please select at least one faculty member!');
+            return false;
+        }
+
+        document.getElementById('delete_faculty_ids').value = selected.join(',');
+        document.getElementById('bulk-delete-form').submit();
+    }
+
+    // ✅ Export selected students
+   window.prepareExport = function () {
+    const selected = Array.from(document.querySelectorAll('.select-faculty'))
+        .filter(cb => cb.checked)
+        .map(cb => cb.value);
+
+    const form = document.getElementById('exportForm');
+
+    // clear old hidden filters
+    form.querySelectorAll('.dynamic-input').forEach(e => e.remove());
+
+    // selected faculty IDs
+    document.getElementById('export_faculty_ids').value = selected.join(',');
+
+    // department filter
+    const dept = document.getElementById('faculty_department_id')?.value || '';
+    if (dept) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'faculty_department_id';
+        input.value = dept;
+        input.classList.add('dynamic-input');
+        form.appendChild(input);
+    }
+
+    form.submit();
+}
+
+});
+</script>
+</body>
+</html>
