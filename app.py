@@ -1020,6 +1020,31 @@ def create_app():
         else:
             flash('No faculty members selected.', 'facultyerror')
         return redirect(url_for('faculty_dashboard'))
+    @app.route('/edit_faculty/<int:faculty_id>', methods=['GET', 'POST'])
+    def edit_faculty(faculty_id):
+        faculty = Faculty.query.get_or_404(faculty_id)
+        departments = Faculty_Department.query.all()
+
+        if request.method == 'POST':
+            faculty.name = request.form['name']
+            faculty.fmid = request.form['fmid']
+            faculty.email = request.form['email']
+            faculty.phone = request.form['phone']
+            faculty.gender = request.form['gender']
+            faculty.address = request.form['address']
+            faculty.city = request.form['city']
+            faculty.state = request.form['state']
+            faculty.pincode = request.form['pincode']
+            faculty.date_of_birth = request.form['dob']
+            faculty.joining_date = request.form['doj']
+            faculty.qualification = request.form['qualification']
+            faculty.experience = request.form['experience']
+            faculty.faculty_department_id = request.form['department']
+            db.session.commit()
+            flash("Faculty updated successfully!", "editfacultysuccess")
+            return redirect(url_for('faculty_dashboard'))
+        return render_template('editfaculty.html', faculty=faculty, departments=departments)
+            
     @app.route('/medium' , methods=['GET','POST'])
     def medium():
         if request.method=="POST":

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Student</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='addstudent.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='editfaculty.css') }}">
 </head>
 <body>
     <header>
@@ -100,19 +100,57 @@
     <div class="container">
         <h2>Edit Faculty Member</h2>
         <form action="{{ url_for('edit_faculty', faculty_id=faculty.id) }}" method="POST">
-            <label for="name">Name:</label>
+            <label for="name">full Name:</label>
             <input type="text" id="name" name="name" value="{{ faculty.name }}" required>
+
+            <label for="fmid">Faculty Member ID:</label>
+            <input type="text" id="fmid" name="fmid" value="{{ faculty.fmid }}" required>
 
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" value="{{ faculty.email }}" required>
 
-            <label for="phone">Phone:</label>
+            <label for="phone">Phone Number:</label>
             <input type="text" id="phone" name="phone" value="{{ faculty.phone }}" required>
 
-            <label for="department">Department:</label>
-            <input type="text" id="department" name="department" value="{{ faculty.department }}" required>
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" value="{{faculty.gender}}" required>
+                <option value="Male" {% if faculty.gender == 'Male' %}selected{% endif %}>Male</option>
+                <option value="Female" {% if faculty.gender == 'Female' %}selected{% endif %}>Female</option>
+                <option value="Other" {% if faculty.gender == 'Other' %}selected{% endif %}>Other</option>
+            </select>
 
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" value="{{ faculty.address }}" required>
+
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" value="{{ faculty.city }}" required>
+
+            <label for="state">State:</label>
+            <input type="text" id="state" name="state" value="{{ faculty.state }}" required>
+
+            <label for="pincode">Pincode:</label>
+            <input type="text" id="pincode" name="pincode" value="{{ faculty.pincode }}" required>
+
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" value="{{ faculty.date_of_birth }}" required>
+
+            <label for="doj">Date of Joining:</label>
+            <input type="date" id="doj" name="doj" value="{{ faculty.joining_date }}" required>
+
+            <label for="qualification">Qualifications:</label>
+            <input type="text" id="qualification" name="qualification" value="{{ faculty.qualification }}" required>
+
+            <label for="experience">Experience:</label>
+            <input type="text" id="experience" name="experience" value="{{ faculty.experience }}" required>
             
-
+            <label for="department">Department:</label>
+            <select id="department" name="department" required>
+                {% for dept in departments %}
+                    <option value="{{ dept.id }}" {% if faculty.department_id == dept.id %}selected{% endif %}>{{ dept.name }}</option>
+                {% endfor %}
+            </select>
             <button type="submit">Update Faculty</button>
         </form>
+    </div>
+</body>
+</html>
