@@ -86,7 +86,6 @@ class Medium(db.Model):
     
     def __repr__(self):
         return f'<Subjects {self.name}>'
-
     
 class Faculty(db.Model):
     __tablename__='faculty'

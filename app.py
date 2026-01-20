@@ -6,7 +6,7 @@ import csv
 import pymysql
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import check_password_hash
-from model import Register, AcadamicYear, Departments, Standards , Roles , Division , Students , Faculty_Department , Faculty , Medium
+from model import Register, AcadamicYear, Departments, Standards , Roles , Division , Students , Faculty_Department , Faculty , Medium , Subjects
 from flask_mail import Message, Mail
 from flask_migrate import Migrate
 import pandas as pd
@@ -64,10 +64,10 @@ def create_app():
             
             if user_data and user_data[3] == password:
                 session['username'] = user_data[1]
-                flash("Login successful!", "login_success")
+                flash("Login successful!", "loginsuccess")
                 return redirect(url_for('home'))
             else:
-                flash("Invalid username or password!", "login_error")
+                flash("Invalid username or password!", "loginerror")
                 return render_template('login.html')
         
         return render_template('login.html')
@@ -157,7 +157,7 @@ def create_app():
                     try:
                         db.session.add(new_dept)
                         db.session.commit()
-                        flash("Department added successfully!", "success")
+                        flash("Department added successfully!", "deptsucess")
                     except Exception as e:
                         db.session.rollback()
                         flash(f"Error adding department: {str(e)}", "error")
@@ -1084,7 +1084,45 @@ def create_app():
         db.session.commit()
         flash("Medium deleted successfully!","successmedium")
         return redirect(url_for('medium'))
-                
+    @app.route('/subjects', methods=['GET', 'POST'])
+    def subjects():
+        if request.method == "POST":
+            subject_name = request.form.get('subject_name')
+            if subject_name:
+                existing = Subjects.query.filter_by(name=subject_name).first()
+                if existing:
+                    flash("Subject already exists", "subjecterror")
+                else:
+                    new_subject = Subjects(name=subject_name)
+                    try:
+                        db.session.add(new_subject)
+                        db.session.commit()
+                        flash("Subject added successfully", "subjectsuccess")
+                    except Exception as e:
+                        db.session.rollback()
+                        flash(f"Error adding subject: {str(e)}", "subjecterror")
+            return redirect(url_for('subjects'))
+        return render_template('subjects.html', Subjects=Subjects.query.all())
+    @app.route('/subjects/edit/<int:id>', methods=['POST'])
+    def edit_subject(id):
+        Subject = Subjects.query.get_or_404(id)
+        if request.method == 'POST':
+            new_name = request.form.get('subject_name')
+            Subject.name = new_name
+            db.session.commit()
+            flash("Subject updated successfully!", "subjectsuccess")
+            return redirect(url_for('subjects'))
+    @app.route('/subjects/delete/<int:id>', methods=['POST', 'GET'])
+    def delete_subject(id):
+        subjects = Subjects.query.get_or_404(id)
+        # if subjects.faculty:
+        #     flash("Cannot delete Subject Because Faculty already Own this Subject.", "deletesubjecterror")
+        #     return redirect(url_for('subjects'))
+        db.session.delete(subjects)
+        db.session.commit()
+        flash("Subject deleted successfully!", "subjectsuccess")
+        return redirect(url_for('subjects'))
+
     return app
     
 
