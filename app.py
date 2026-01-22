@@ -368,6 +368,7 @@ def create_app():
                 department_id=request.form.get('department_id')
                 standard_id=request.form.get('standard_id')
                 division_id=request.form.get('division_id')
+                medium_id=request.form.get('medium')
                 
                 existing_student = Students.query.filter_by(email=email).first()
                 if existing_student:
@@ -392,6 +393,7 @@ def create_app():
                     department_id=department_id,
                     standard_id=standard_id,
                     division_id=division_id
+                    ,medium_id=medium_id
                 )
                 if not acadamic_year_id or not department_id or not standard_id or not division_id:
                     flash("Error: All dropdowns must be selected!", "dropdownerror")

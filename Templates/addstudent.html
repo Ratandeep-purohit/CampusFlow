@@ -195,7 +195,12 @@
                     <option value="{{ div.id }}">{{ div.name }}</option>
                 {% endfor %}
             </select>
-
+            <label for="medium">Medium:</label>
+            <select name="medium" id="medium" required>
+                <option value="">-- Select Medium --</option>
+                {% for med in mediums %}
+                    <option value="{{ med.id }}">{{ med.name }}</option>
+                {% endfor %}
             <button type="submit">Add Student</button>
         </form>
     </div>
