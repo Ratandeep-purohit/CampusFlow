@@ -132,7 +132,7 @@ class Students(UserMixin, db.Model):
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     standard_id = db.Column(db.Integer, db.ForeignKey('standards.id'), nullable=False)
     division_id = db.Column(db.Integer, db.ForeignKey('division.id'), nullable=False)
-    medium_id = db.Column(db.Integer, db.ForeignKey('Medium.id'), nullable=False)
+    medium_id = db.Column(db.Integer, db.ForeignKey('Medium.id'), nullable=True)
 
 
     acadamic_year = db.relationship('AcadamicYear', backref='students')

@@ -392,8 +392,8 @@ def create_app():
                     acadamic_year_id=acadamic_year_id,
                     department_id=department_id,
                     standard_id=standard_id,
-                    division_id=division_id
-                    ,medium_id=medium_id
+                    division_id=division_id,
+                    medium_id=medium_id
                 )
                 if not acadamic_year_id or not department_id or not standard_id or not division_id:
                     flash("Error: All dropdowns must be selected!", "dropdownerror")
@@ -413,13 +413,15 @@ def create_app():
         departments=Departments.query.all()
         standards=Standards.query.all()
         divisions=Division.query.all()
+        mediums=Medium.query.all()
         
         return render_template(
             'addstudent.html',
             years=years,
             departments=departments,
             standards=standards,
-            divisions=divisions     
+            divisions=divisions  
+            ,mediums=mediums   
         )
     @app.route('/Add_bulk_student')
     def Add_bulk_student():
@@ -429,7 +431,7 @@ def create_app():
         # Required student columns
         student_columns = ["name","enrollment number", "email", "phone", "address", "date_of_birth","date_of_addmission",
                            "gender", "father_name", "mother_name", "nationality", "religion", "category",
-                        "acadamic_year", "department", "standard", "division"]
+                        "acadamic_year", "department", "standard", "division", "medium"]
 
         # Blank student sheet
         df_students = pd.DataFrame(columns=student_columns)
@@ -462,7 +464,7 @@ def create_app():
 
         required_columns = ["name","enrollment number", "email", "phone", "address", "date_of_birth","date_of_addmission",
                             "gender", "father_name", "mother_name", "nationality", "religion", "category",
-                            "acadamic_year", "department", "standard", "division"]
+                            "acadamic_year", "department", "standard", "division", "medium"]
 
         # Check for missing columns
         missing_cols = [col for col in required_columns if col not in df.columns]
@@ -523,7 +525,8 @@ def create_app():
                     acadamic_year_id=acad_year.id,
                     department_id=dept.id,
                     standard_id=std.id,
-                    division_id=div.id
+                    division_id=div.id,
+                    medium_id=Medium.query.filter_by(name=row["medium"]).first().id if Medium.query.filter_by(name=row["medium"]).first() else None
                 )
                 new_students_list.append(new_student)
                 inserted += 1
@@ -555,7 +558,8 @@ def create_app():
             'acadamic_year': None,
             'department_id': None,
             'standard_id': None,
-            'division_id': None
+            'division_id': None,
+            'medium_id': None
         }
 
         if request.method == 'POST':
@@ -563,6 +567,7 @@ def create_app():
             selected_filters['department_id'] = request.form.get('department_id')
             selected_filters['standard_id'] = request.form.get('standard_id')
             selected_filters['division_id'] = request.form.get('division_id')
+            selected_filters['medium_id'] = request.form.get('medium_id')
 
             # Only fetch students if all filters are selected
             if all(selected_filters.values()):
@@ -570,7 +575,8 @@ def create_app():
                     acadamic_year_id=selected_filters['acadamic_year'],
                     department_id=selected_filters['department_id'],
                     standard_id=selected_filters['standard_id'],
-                    division_id=selected_filters['division_id']
+                    division_id=selected_filters['division_id'],
+                    medium_id=selected_filters['medium_id']
                 ).all()
                 if not students:
                     flash("No students found for the selected criteria.","nostudent")
@@ -582,6 +588,7 @@ def create_app():
             standards=standards,
             divisions=divisions,
             students=students,
+            mediums=Medium.query.all(),
             selected_filters=selected_filters
         )
     @app.route('/delete_student/<int:student_id>', methods=['POST'])
@@ -624,6 +631,7 @@ def create_app():
             student.department_id = request.form['department_id']
             student.standard_id = request.form['standard_id']
             student.division_id = request.form['division_id']
+            standards.medium_id = request.form['medium']
             db.session.commit()
             flash("Student updated successfully!", "success")
             return redirect(url_for('student_dashboard'))
@@ -690,7 +698,7 @@ def create_app():
         writer = csv.writer(output)
 
         writer.writerow([
-            'Academic Year', 'Department', 'Standard', 'Division',
+            'Academic Year', 'Department', 'Standard', 'Division', 'Medium',
             'Name','Enrollment number','Email', 'Phone', 'Address', 'Date of Birth',
             'Gender', 'Father Name', 'Mother Name', 'Nationality', 'Religion', 'Category',
             'Date of admission'
@@ -702,6 +710,7 @@ def create_app():
                 s.department.department_name if s.department else '',
                 s.standard.name if s.standard else '',
                 s.division.name if s.division else '',
+                s.medium.name if s.medium else '',
                 s.name,
                 s.enrollment_number,
                 s.email,
@@ -797,7 +806,13 @@ def create_app():
                     (Faculty.email == email) | (Faculty.phone == phone)
                 ).first()
                 if existing_faculty:
-                    flash("Error: Faculty with this email or phone already exists!", "FacultyEmailerror")
+                    flash("Error: Faculty with this email or phone already exists!", "Facultyerror")
+                    return redirect(url_for('Add_faculty'))
+                
+                #check faculty id
+                existing_fmid = Faculty.query.filter_by(fmid=fmid).first()
+                if existing_fmid:
+                    flash("Error: Faculty with this Faculty ID already exists!", "Facultyerror")
                     return redirect(url_for('Add_faculty'))
 
                 # ✅ Add new faculty

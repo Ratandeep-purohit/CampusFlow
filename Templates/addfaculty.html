@@ -103,7 +103,7 @@
     <div class="flash-container">
         {% if category=="Facultyaddsuccess" %}
         <div class="flash {{ category }}">{{message}}</div>
-        {% elif category=="Facultyadderror" %}
+        {% elif category=="Facultyerror" %}
          <div class="flash {{ category }}">{{message}}</div>
         {% endif %}
         {% for category, message in messages %}

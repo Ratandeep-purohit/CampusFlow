@@ -123,6 +123,12 @@
                 <option value="" disabled {% if not selected_filters.division_id %} selected{% endif %}>Select Division</option>
                 {% for div in divisions %}<option value="{{ div.id }}">{{ div.name }}</option>{% endfor %}
             </select>
+            <label for="medium">Medium</label>
+            <select name="medium_id" id="medium_id" required>
+                <option value="" disabled {% if not selected_filters.medium_id %} selected{% endif %}>Select Medium</option>
+                {% for m in mediums %}<option value="{{ m.id }}">{{ m.name }}</option>{% endfor %}
+            </select>
+
             <!-- ...other selects... -->
             <button type="submit">Filter Students</button>
         </form>
