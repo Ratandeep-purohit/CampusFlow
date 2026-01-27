@@ -375,6 +375,14 @@ def create_app():
                 if existing_student:
                     flash("Error: Student with this email already exists!", "Emailerror")
                     return redirect(url_for('Add_student'))
+                existing_student2=Students.query.filter_by(enrollment_number=enrollment_number).first()
+                if existing_student2:
+                    flash("Error: Student with this Enrollment Number already exists!", "Enrollmenterror")
+                    return redirect(url_for('Add_student'))
+                existing_student3=Students.query.filter_by(phone=phone).first()
+                if existing_student3:
+                    flash("Error: Student with this Phone Number already exists!", "Phoneerror")
+                    return redirect(url_for('Add_student'))
                 
                 new_student=Students(
                     name=name,

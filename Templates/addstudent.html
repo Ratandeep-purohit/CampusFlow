@@ -105,6 +105,10 @@
     {% for category, message in messages %}
       {% if category == 'Emailerror' %}
         <div class="flash {{ category }}">{{ message }}</div>
+        {% elif category == 'Phoneerror' %}
+        <div class="flash {{ category }}">{{ message }}</div>
+        {% elif category == 'Enrollmenterror' %}
+        <div class="flash {{ category }}">{{ message }}</div>
         {% elif category == 'addsuccess' %}
         <div class="flash {{ category }}">{{ message }}</div>
         {% elif category == 'adderror' %}
