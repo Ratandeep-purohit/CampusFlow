@@ -188,6 +188,7 @@ def create_app():
     # -------- Academic Year -------- #
     @app.route('/acadamic_year', methods=['GET', 'POST'])
     def acadamic_year():
+        session.pop('_flashs',None)
         if request.method == 'POST':
             year = request.form.get('acadamic_year')
             if year:

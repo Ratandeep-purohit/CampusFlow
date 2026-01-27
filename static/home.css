@@ -243,3 +243,50 @@ footer {
 .dropdown:hover .dropdown-content {
     display: block;
 }
+.flash-container {
+  position: fixed; /* upper center */
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 9999;
+  pointer-events: none; /* click-through */
+}
+.flash-message {
+  min-width: 250px;
+  max-width: 380px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  opacity: 0;
+  transform: translateY(-15px);
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  pointer-events: auto; /* message clickable if needed */
+}
+
+.flash-message.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.flash-message.loginsuccess {
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  border: 1px solid #81c784;
+  color: #256029;
+}
+
+.flash-message.loginerror {
+  background: linear-gradient(135deg, #ffebee, #ffcdd2);
+  border: 1px solid #e57373;
+  color: #b71c1c;
+}
+
+.flash-message.fade-out {
+  opacity: 0;
+  transform: translateY(-25px);
+}

@@ -96,7 +96,17 @@
     </li>
     </ul>
 </nav>
-
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash-message {{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-text">
@@ -136,4 +146,26 @@
     </footer>
 
 </body>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+  const container = document.querySelector(".flash-container");
+  if (!container) return;
+
+  const messages = container.querySelectorAll(".flash-message");
+
+  messages.forEach((msg, index) => {
+    // Slight stagger for multiple messages
+    setTimeout(() => msg.classList.add("show"), index * 100);
+
+    // Fade out after 3 seconds
+    setTimeout(() => {
+      msg.classList.add("fade-out");
+      setTimeout(() => {
+        msg.remove();
+        if (container.children.length === 0) container.remove();
+      }, 400); // match CSS transition
+    }, 4000);
+  });
+});
+</script>
 </html>

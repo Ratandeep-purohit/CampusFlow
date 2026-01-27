@@ -105,7 +105,7 @@
   {% if messages %}
   <div class="flash-container">
     {% for category, message in messages %}
-      <div class="flash-message {{ 'error' if category == 'year_error' else 'year_sucess' }}">
+      <div class="flash-message {{ 'error' if category == 'year_error' else 'year_success' }}">
         {{ message }}
       </div>
     {% endfor %}
