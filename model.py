@@ -86,6 +86,16 @@ class Medium(db.Model):
     
     def __repr__(self):
         return f'<Subjects {self.name}>'
+class Timeslots(db.Model):
+    __tablename__='timeslots'
+    
+    id=db.Column(db.Integer,primary_key=True)
+    name=db.Column(db.String(100),nullable=False)
+    time_from=db.Column(db.Time,nullable=False)
+    time_to=db.Column(db.Time,nullable=False)
+    
+    def __repr__(self):
+        return f'<Timeslots {self.name}>'
     
 class Faculty(db.Model):
     __tablename__='faculty'

@@ -1148,6 +1148,9 @@ def create_app():
         db.session.commit()
         flash("Subject deleted successfully!", "subjectsuccess")
         return redirect(url_for('subjects'))
+    @app.route('/timeslots', methods=['GET', 'POST'])
+    def timeslots():
+        return render_template('timeslots.html')
 
     return app
     

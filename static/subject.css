@@ -329,13 +329,13 @@ header nav ul li a:hover {
   transform: translateY(0);
 }
 
-.flash-message.success {
+.flash-message.subjectsuccess {
   background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
   border: 1px solid #81c784;
   color: #256029;
 }
 
-.flash-message.error {
+.flash-message.subjecterror {
   background: linear-gradient(135deg, #ffebee, #ffcdd2);
   border: 1px solid #e57373;
   color: #b71c1c;
