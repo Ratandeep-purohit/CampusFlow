@@ -40,11 +40,11 @@ def create_app():
 
     @app.route('/')
     def landing():
-        return render_template('landing.html')
+        return render_template('/initial/landing.html')
 
     @app.route('/register')
     def register_page():
-        return render_template('Register.html')
+        return render_template('/initial/Register.html')
 
     @app.route('/login', methods=['GET', 'POST'])
     def login():
@@ -70,15 +70,15 @@ def create_app():
                 flash("Invalid username or password!", "loginerror")
                 return render_template('login.html')
         
-        return render_template('login.html')
+        return render_template('initial/login.html')
 
     @app.route('/login.html')
     def login2():
-        return render_template('login.html')
+        return render_template('initial/login.html')
 
     @app.route('/feature')
     def feature():
-        return render_template('feature.html')
+        return render_template('/home/feature.html')
 
     @app.route('/Register.html', methods=['GET', 'POST'])
     def register():
@@ -91,7 +91,7 @@ def create_app():
 
             if password != confirm_password:
                 flash("Passwords do not match!", "danger")
-                return redirect('/Register.html')
+                return redirect('initial/Register.html')
 
             existing_user = Register.query.filter_by(username=username).first()
             if existing_user:
@@ -104,19 +104,19 @@ def create_app():
             flash("Registration successful!", "success")
             return redirect('/login')
 
-        return render_template('Register.html')
+        return render_template('/initial/Register.html')
 
     @app.route('/home')
     def home():
         if 'username' in session:
-            return render_template('home.html', username=session['username'])
+            return render_template('home/home.html', username=session['username'])
         else:
             flash("You need to log in first!", "danger")
             return redirect(url_for('login'))
 
     @app.route('/about/')
     def about():
-        return render_template('about.html')
+        return render_template('home/about.html')
 
     @app.route('/contact', methods=['GET', 'POST'])
     def contact():
@@ -135,7 +135,7 @@ def create_app():
             flash("Thank you for your feedback!", "success")
             return redirect(url_for("contact"))
 
-        return render_template("contact.html")
+        return render_template("home/contact.html")
 
     @app.route('/logout')
     def logout():
@@ -163,7 +163,7 @@ def create_app():
                         flash(f"Error adding department: {str(e)}", "error")
                 return redirect(url_for('department'))
         departments_list = Departments.query.all()
-        return render_template('department.html', departments=departments_list)
+        return render_template('setting/department.html', departments=departments_list)
 
     @app.route('/departments/edit/<int:id>', methods=['GET', 'POST'])
     def edit_department(id):
@@ -206,7 +206,7 @@ def create_app():
                         flash(f"Error adding academic year: {str(e)}", "year_error")
                 return redirect(url_for('acadamic_year'))
         years = AcadamicYear.query.all()
-        return render_template("acadamic_year.html", years=years)
+        return render_template("setting/acadamic_year.html", years=years)
 
     @app.route('/acadamic_years/edit/<int:id>', methods=['GET', 'POST'])
     def edit_acadamic_year(id):
@@ -249,7 +249,7 @@ def create_app():
             return redirect(url_for('standards_page'))
 
         all_standards = Standards.query.all()
-        return render_template('Standards.html', standards=all_standards)
+        return render_template('setting/Standards.html', standards=all_standards)
 
     @app.route('/standards/edit/<int:id>', methods=['GET', 'POST'])
     def edit_standards(id):
@@ -290,7 +290,7 @@ def create_app():
                         flash(f"Error adding role: {str(e)}","error")
             return redirect(url_for('roles_page'))
         all_roles=Roles.query.all()
-        return render_template('Roles.html',Roles=all_roles)
+        return render_template('setting/Roles.html',Roles=all_roles)
     @app.route('/Roles/edit/<int:id>',methods=['GET','POST'])
     def Edit_Roles(id):
         role=Roles.query.get_or_404(id)
@@ -326,7 +326,7 @@ def create_app():
                         flash(f"Error adding Division: {str(e)}","errordivision")
             return redirect(url_for('Division_page'))
         all_division=Division.query.all()
-        return render_template('division.html',Division=all_division)
+        return render_template('setting/division.html',Division=all_division)
     @app.route('/Division/edit/<int:id>',methods=['GET','POST'])
     def Edit_Division(id):
         division=Division.query.get_or_404(id)
@@ -425,7 +425,7 @@ def create_app():
         mediums=Medium.query.all()
         
         return render_template(
-            'addstudent.html',
+            'Student/addstudent.html',
             years=years,
             departments=departments,
             standards=standards,
@@ -434,7 +434,7 @@ def create_app():
         )
     @app.route('/Add_bulk_student')
     def Add_bulk_student():
-        return render_template('addbulkstudent.html')
+        return render_template('Student/addbulkstudent.html')
     @app.route('/download_sample_excel')
     def download_sample_excel():
         # Required student columns
@@ -591,7 +591,7 @@ def create_app():
                     flash("No students found for the selected criteria.","nostudent")
 
         return render_template(
-            'student_dashboard.html',
+            'Student/student_dashboard.html',
             years=years,
             departments=departments,
             standards=standards,
@@ -646,7 +646,7 @@ def create_app():
             return redirect(url_for('student_dashboard'))
         
 
-        return render_template('editstudent.html', student=student, years=years, departments=departments, standards=standards, divisions=divisions)
+        return render_template('Student/editstudent.html', student=student, years=years, departments=departments, standards=standards, divisions=divisions)
     @app.route('/bulk_delete_students', methods=['POST'])
     def bulk_delete_students():
         student_ids = request.form.get('student_ids')
@@ -763,7 +763,7 @@ def create_app():
             return redirect(url_for('faculty_departments'))
     
         departments_list = Faculty_Department.query.all()
-        return render_template('faculty_department.html', departments=departments_list)
+        return render_template('Faculty/faculty_department.html', departments=departments_list)
 
 
     @app.route('/faculty_departments/edit/<int:id>', methods=['POST'])
@@ -854,10 +854,10 @@ def create_app():
 
         # ✅ Send dropdown data to template
         departments = Faculty_Department.query.all()
-        return render_template('addfaculty.html', departments=departments)
+        return render_template('Faculty/addfaculty.html', departments=departments)
     @app.route('/Add_bulk_faculty')
     def Add_bulk_faculty():
-        return render_template('addbulkfaculty.html')
+        return render_template('Faculty/addbulkfaculty.html')
     @app.route('/download_sample_excel_faculty')
     def download_sample_excel_faculty():
         # Create a sample Excel file
@@ -961,7 +961,7 @@ def create_app():
                     flash("No faculties found for the selected criteria.", "nofaculty")
 
         return render_template(
-            'faculty_dashboard.html',
+            'Faculty/faculty_dashboard.html',
             departments=departments,
             faculty_list=faculty_list,
             selected_filters=selected_filters
@@ -1069,7 +1069,7 @@ def create_app():
             db.session.commit()
             flash("Faculty updated successfully!", "editfacultysuccess")
             return redirect(url_for('faculty_dashboard'))
-        return render_template('editfaculty.html', faculty=faculty, departments=departments)
+        return render_template('Faculty/editfaculty.html', faculty=faculty, departments=departments)
             
     @app.route('/medium' , methods=['GET','POST'])
     def medium():
@@ -1090,7 +1090,7 @@ def create_app():
                         flash(f"Error in adding medium:{str(e)}","errormedium")
             return redirect(url_for('medium'))
         all_medium=Medium.query.all()
-        return render_template('medium.html',Medium=all_medium)     
+        return render_template('setting/medium.html',Medium=all_medium)     
     @app.route('/medium/edit/<int:id>',methods=['GET','POST'])
     def Edit_medium(id):
         medium=Medium.query.get_or_404(id)
@@ -1128,7 +1128,7 @@ def create_app():
                         db.session.rollback()
                         flash(f"Error adding subject: {str(e)}", "subjecterror")
             return redirect(url_for('subjects'))
-        return render_template('subjects.html', Subjects=Subjects.query.all())
+        return render_template('Faculty/subjects.html', Subjects=Subjects.query.all())
     @app.route('/subjects/edit/<int:id>', methods=['POST'])
     def edit_subject(id):
         Subject = Subjects.query.get_or_404(id)
@@ -1150,7 +1150,7 @@ def create_app():
         return redirect(url_for('subjects'))
     @app.route('/timeslots', methods=['GET', 'POST'])
     def timeslots():
-        return render_template('timeslots.html')
+        return render_template('Faculty/timeslots.html')
 
     return app
     
