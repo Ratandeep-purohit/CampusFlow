@@ -6,7 +6,7 @@ import csv
 import pymysql
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import check_password_hash
-from model import Register, AcadamicYear, Departments, Standards , Roles , Division , Students , Faculty_Department , Faculty , Medium , Subjects
+from model import Register, AcadamicYear, Departments, Standards , Roles , Division , Students , Faculty_Department , Faculty , Medium , Subjects , Timeslots
 from flask_mail import Message, Mail
 from flask_migrate import Migrate
 import pandas as pd
@@ -1150,7 +1150,40 @@ def create_app():
         return redirect(url_for('subjects'))
     @app.route('/timeslots', methods=['GET', 'POST'])
     def timeslots():
-        return render_template('Faculty/timeslots.html')
+        if request.method=="POST":
+            timeslot_name=request.form.get('timeslot')
+            timefrom=request.form.get('time-from')
+            timeto=request.form.get('time-to')
+            new_timeslot=Timeslots(name=timeslot_name,time_from=timefrom,time_to=timeto)
+            try:
+                db.session.add(new_timeslot)
+                db.session.commit()
+                flash("Timeslot added successfully","timeslotsuccess")
+            except Exception as e:
+                db.session.rollback()
+                flash(f"Error in adding timeslot: {str(e)}","timesloterror")
+            return redirect(url_for('timeslots'))
+        return render_template('Faculty/timeslots.html', timeslots=Timeslots.query.all())
+    @app.route('/timeslots/edit/<int:id>', methods=['POST'])
+    def edit_timeslot(id):
+        timeslots = Timeslots.query.get_or_404(id)
+        if request.method == 'POST':
+            timeslots.name = request.form.get('timeslot_name')
+            timeslots.time_from = request.form.get('time_from')
+            timeslots.time_to = request.form.get('time_to')
+            db.session.commit()
+            flash("Timeslot updated successfully!", "timeslotsuccess")
+            return redirect(url_for('timeslots'))
+    @app.route('/timeslots/delete/<int:id>', methods=['POST', 'GET'])
+    def delete_timeslot(id):
+        timeslot = Timeslots.query.get_or_404(id)
+        # if timeslot.faculty:
+        #     flash("Cannot delete Timeslot Because Faculty already Own this Timeslot.", "deletetimesloterror")
+        #     return redirect(url_for('timeslots'))
+        db.session.delete(timeslot)
+        db.session.commit()
+        flash("Timeslot deleted successfully!", "timeslotsuccess")
+        return redirect(url_for('timeslots'))
 
     return app
     

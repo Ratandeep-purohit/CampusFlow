@@ -120,7 +120,7 @@ header nav ul li a:hover {
 .add-year-box,
 .year-list-box {
     flex: 1;
-    min-width: 0;
+    min-width: 300px;
     background: #14141f;
     padding: 30px;
     border-radius: 10px;
@@ -131,6 +131,7 @@ header nav ul li a:hover {
 .add-year-box h2 {
     font-size: 22px;
     margin-bottom: 20px;
+    margin-left: 0%;
 }
 
 .form-group {
@@ -176,6 +177,8 @@ header nav ul li a:hover {
 .year-list-box h1 {
     font-size: 22px;
     margin-bottom: 20px;
+    margin-left: 100px;
+    margin-right: auto;
 }
 
 .year-list {
@@ -286,13 +289,13 @@ header nav ul li a:hover {
     margin-bottom: 15px;
 }
 
-.flash-error {
+.flash-error , .timesloterror {
     background-color: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
 }
 
-.flash-success {
+.flash-success , .timeslotsuccess  {
     background-color: #d4edda;
     color: #155724;
     border: 1px solid #c3e6cb;
